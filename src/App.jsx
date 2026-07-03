@@ -27,75 +27,77 @@ function App() {
       />
 
       <main className="main-content">
-        {activeTab === 'dashboard' && (
-          <Dashboard 
-            setActiveTab={setActiveTab} 
-            setSelectedComplaintId={setSelectedComplaintId} 
-          />
-        )}
+        <div className="content-container">
+          {activeTab === 'dashboard' && (
+            <Dashboard 
+              setActiveTab={setActiveTab} 
+              setSelectedComplaintId={setSelectedComplaintId} 
+            />
+          )}
 
-        {activeTab === 'complaints' && (
-          <Complaints 
-            setSelectedComplaintId={setSelectedComplaintId} 
-            setActiveTab={setActiveTab} 
-          />
-        )}
+          {activeTab === 'complaints' && (
+            <Complaints 
+              setSelectedComplaintId={setSelectedComplaintId} 
+              setActiveTab={setActiveTab} 
+            />
+          )}
 
-        {activeTab === 'assessment' && (
-          <PreAssessment 
-            selectedComplaintId={selectedComplaintId} 
-            setSelectedComplaintId={setSelectedComplaintId} 
-            setActiveTab={setActiveTab} 
-          />
-        )}
+          {activeTab === 'assessment' && (
+            <PreAssessment 
+              selectedComplaintId={selectedComplaintId} 
+              setSelectedComplaintId={setSelectedComplaintId} 
+              setActiveTab={setActiveTab} 
+            />
+          )}
 
-        {activeTab === 'fir' && (
-          <FirManagement 
-            selectedComplaintId={selectedComplaintId} 
-            setSelectedComplaintId={setSelectedComplaintId} 
-            setActiveTab={setActiveTab} 
-          />
-        )}
+          {activeTab === 'fir' && (
+            <FirManagement 
+              selectedComplaintId={selectedComplaintId} 
+              setSelectedComplaintId={setSelectedComplaintId} 
+              setActiveTab={setActiveTab} 
+            />
+          )}
 
-        {activeTab === 'evidence' && (
-          <EvidenceManagement 
-            selectedComplaintId={selectedComplaintId} 
-            setSelectedComplaintId={setSelectedComplaintId} 
-          />
-        )}
+          {activeTab === 'evidence' && (
+            <EvidenceManagement 
+              selectedComplaintId={selectedComplaintId} 
+              setSelectedComplaintId={setSelectedComplaintId} 
+            />
+          )}
 
-        {activeTab === 'notices' && (
-          <NoticesManagement 
-            selectedComplaintId={selectedComplaintId} 
-            setSelectedComplaintId={setSelectedComplaintId} 
-          />
-        )}
+          {activeTab === 'notices' && (
+            <NoticesManagement 
+              selectedComplaintId={selectedComplaintId} 
+              setSelectedComplaintId={setSelectedComplaintId} 
+            />
+          )}
 
-        {activeTab === 'forensics' && (
-          <ForensicsWitnesses 
-            selectedComplaintId={selectedComplaintId} 
-            setSelectedComplaintId={setSelectedComplaintId} 
-          />
-        )}
+          {activeTab === 'forensics' && (
+            <ForensicsWitnesses 
+              selectedComplaintId={selectedComplaintId} 
+              setSelectedComplaintId={setSelectedComplaintId} 
+            />
+          )}
 
-        {activeTab === 'sop' && (
-          <SopWorkflows />
-        )}
+          {activeTab === 'sop' && (
+            <SopWorkflows />
+          )}
 
-        {activeTab === 'timeline' && (
-          <CaseTimeline 
-            selectedComplaintId={selectedComplaintId} 
-            setSelectedComplaintId={setSelectedComplaintId} 
-            setActiveTab={setActiveTab} 
-          />
-        )}
+          {activeTab === 'timeline' && (
+            <CaseTimeline 
+              selectedComplaintId={selectedComplaintId} 
+              setSelectedComplaintId={setSelectedComplaintId} 
+              setActiveTab={setActiveTab} 
+            />
+          )}
 
-        {activeTab === 'report' && (
-          <FinalReport 
-            selectedComplaintId={selectedComplaintId} 
-            setSelectedComplaintId={setSelectedComplaintId} 
-          />
-        )}
+          {activeTab === 'report' && (
+            <FinalReport 
+              selectedComplaintId={selectedComplaintId} 
+              setSelectedComplaintId={setSelectedComplaintId} 
+            />
+          )}
+        </div>
       </main>
     </div>
   );

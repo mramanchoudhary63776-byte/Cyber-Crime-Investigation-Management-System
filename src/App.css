@@ -127,18 +127,19 @@
 
 .top-bar {
   height: 64px;
-  background: rgba(13, 19, 33, 0.85);
+  background: rgba(13, 19, 33, 0.7);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  backdrop-filter: blur(12px);
-  padding: 0 20px;
+  backdrop-filter: blur(16px);
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: sticky;
-  top: 0;
+  top: 12px;
   z-index: 90;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-main), inset 0 1px 1px rgba(255, 255, 255, 0.05);
 }
 
 .page-header-title {
@@ -178,11 +179,19 @@
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 20px;
-  backdrop-filter: blur(12px);
-  box-shadow: var(--shadow-main);
-  transition: all 0.2s ease;
+  padding: 22px;
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-main), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.csoc-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(6, 182, 212, 0.25);
+  box-shadow: var(--shadow-main), 0 0 25px rgba(6, 182, 212, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.08);
 }
 
 .csoc-card-header {
@@ -205,9 +214,9 @@
 }
 
 .grid-1 { display: grid; grid-template-columns: 1fr; gap: 20px; }
-.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
 
 .mb-4 { margin-bottom: 16px; }
 
@@ -277,11 +286,13 @@
 .btn-primary {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
-  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .btn-primary:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(6, 182, 212, 0.35);
+  filter: brightness(1.15);
 }
 
 .btn-secondary {
@@ -290,7 +301,9 @@
   border: 1px solid var(--border-color);
 }
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 /* Forms */
@@ -325,8 +338,7 @@
 }
 
 @media (max-width: 1024px) {
-  .grid-4 { grid-template-columns: repeat(2, 1fr); }
-  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  /* Grids handle stacking automatically via minmax(..., 1fr) */
 }
 
 @media (max-width: 768px) {
@@ -354,12 +366,30 @@
   .top-bar {
     padding: 0 12px;
     height: 58px;
+    top: 0;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   }
   .page-header-title span {
     font-size: 0.95rem;
   }
+}
 
-  .grid-4, .grid-3, .grid-2 {
+/* Centering layout content area */
+.content-container {
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Custom layout for SOP workflows */
+.sop-layout-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .sop-layout-grid {
     grid-template-columns: 1fr;
   }
 }

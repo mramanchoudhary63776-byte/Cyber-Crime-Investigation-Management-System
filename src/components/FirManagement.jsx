@@ -1,35 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileSpreadsheet, Plus, ShieldCheck, UserCheck, Eye, Layers, FileText } from 'lucide-react';
 import { investigationService } from '../data/investigationService';
 
 export default function FirManagement({ selectedComplaintId, setSelectedComplaintId, setActiveTab }) {
-  const [firs, setFirs] = useState(investigationService.getFirs());
-  const complaints = investigationService.getComplaints();
+  const [firs, setFirs] = useState([]);
+  const [complaints, setComplaints] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [viewFir, setViewFir] = useState(null);
 
   const activeComplaint = complaints.find(c => c.id === selectedComplaintId) || complaints[0];
-  const activeComplaintDetails = activeComplaint ? investigationService.getComplaintDetails(activeComplaint.id) : null;
 
   const [formData, setFormData] = useState({
-    complaintId: selectedComplaintId || complaints[0]?.id || '',
+    complaintId: selectedComplaintId || '',
     policeStation: 'Cyber Crime PS, Special Cell, Central',
     investigatingOfficer: 'Insp. Vikram Rathore',
-    itActSections: activeComplaintDetails ? activeComplaintDetails.sections.join(', ') : 'Sec 66C, Sec 66D, Sec 43'
+    itActSections: 'Sec 66C, Sec 66D, Sec 43'
   });
 
-  const handleRegister = (e) => {
+  useEffect(() => {
+    let active = true;
+    async function loadData() {
+      try {
+        const [fList, cList] = await Promise.all([
+          investigationService.getFirs(),
+          investigationService.getComplaints()
+        ]);
+        if (active) {
+          setFirs(fList || []);
+          setComplaints(cList || []);
+          const defaultCId = selectedComplaintId || cList[0]?.id || '';
+          setFormData(prev => ({ ...prev, complaintId: defaultCId }));
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadData();
+    return () => { active = false; };
+  }, [selectedComplaintId]);
+
+  useEffect(() => {
+    let active = true;
+    async function loadItActSections() {
+      if (!formData.complaintId) return;
+      try {
+        const details = await investigationService.getComplaintDetails(formData.complaintId);
+        if (active && details && details.sections) {
+          setFormData(prev => ({ ...prev, itActSections: details.sections.join(', ') }));
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadItActSections();
+    return () => { active = false; };
+  }, [formData.complaintId]);
+
+  const handleRegister = async (e) => {
     e.preventDefault();
-    const sectionsArray = formData.itActSections.split(',').map(s => s.trim());
-    const createdFir = investigationService.registerFir(formData.complaintId, {
-      policeStation: formData.policeStation,
-      investigatingOfficer: formData.investigatingOfficer,
-      itActSections: sectionsArray
-    });
-    setFirs([...investigationService.getFirs()]);
-    setShowModal(false);
-    setSelectedComplaintId(formData.complaintId);
-    setViewFir(createdFir);
+    try {
+      const sectionsArray = formData.itActSections.split(',').map(s => s.trim());
+      const createdFir = await investigationService.registerFir(formData.complaintId, {
+        policeStation: formData.policeStation,
+        investigatingOfficer: formData.investigatingOfficer,
+        itActSections: sectionsArray
+      });
+      const fList = await investigationService.getFirs();
+      setFirs(fList || []);
+      setShowModal(false);
+      setSelectedComplaintId(formData.complaintId);
+      setViewFir(createdFir);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -174,12 +217,9 @@ export default function FirManagement({ selectedComplaintId, setSelectedComplain
               <div className="form-group">
                 <label className="form-label">Select Complaint ID</label>
                 <select className="form-select" value={formData.complaintId} onChange={e => {
-                  const cId = e.target.value;
-                  const details = investigationService.getComplaintDetails(cId);
                   setFormData({
                     ...formData,
-                    complaintId: cId,
-                    itActSections: details ? details.sections.join(', ') : formData.itActSections
+                    complaintId: e.target.value
                   });
                 }}>
                   {complaints.map(c => (

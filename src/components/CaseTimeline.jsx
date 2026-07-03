@@ -1,15 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { GitBranch, CheckCircle2, Circle, ArrowDown, ShieldCheck, HardDrive, FileCheck, Award, Microscope, FileText } from 'lucide-react';
 import { investigationService } from '../data/investigationService';
 
 export default function CaseTimeline({ selectedComplaintId, setSelectedComplaintId, setActiveTab }) {
-  const complaints = investigationService.getComplaints();
+  const [complaints, setComplaints] = useState([]);
+  const [firs, setFirs] = useState([]);
+  const [evidence, setEvidence] = useState([]);
+  const [notices, setNotices] = useState([]);
+  const [forensics, setForensics] = useState([]);
+
   const activeComplaint = complaints.find(c => c.id === selectedComplaintId) || complaints[0];
-  
-  const firs = investigationService.getFirs().filter(f => f.complaintId === activeComplaint?.id);
-  const evidence = investigationService.getEvidence(activeComplaint?.id);
-  const notices = investigationService.getNotices(activeComplaint?.id);
-  const forensics = investigationService.getForensics(activeComplaint?.id);
+
+  useEffect(() => {
+    let active = true;
+    async function loadData() {
+      try {
+        const cList = await investigationService.getComplaints();
+        if (active) {
+          setComplaints(cList || []);
+          const activeCId = selectedComplaintId || cList[0]?.id;
+          if (activeCId) {
+            const [fList, eList, nList, foList] = await Promise.all([
+              investigationService.getFirs(),
+              investigationService.getEvidence(activeCId),
+              investigationService.getNotices(activeCId),
+              investigationService.getForensics(activeCId)
+            ]);
+            if (active) {
+              setFirs(fList.filter(f => f.complaintId === activeCId));
+              setEvidence(eList || []);
+              setNotices(nList || []);
+              setForensics(foList || []);
+            }
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadData();
+    return () => { active = false; };
+  }, [selectedComplaintId]);
 
   const timelineSteps = [
     {

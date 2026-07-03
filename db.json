@@ -1,0 +1,238 @@
+{
+  "complaints": [
+    {
+      "id": "CCIS-2026-5824",
+      "victimName": "spider man",
+      "contact": "911",
+      "email": "sidy@gmail.com",
+      "incidentType": "Matrimonial / Romance Scam",
+      "incidentDate": "2026-07-02T05:12",
+      "location": "",
+      "financialLoss": 20000,
+      "description": "",
+      "riskLevel": "Medium",
+      "specificDetails": {
+        "suspectProfile": "kjdklad;kljf.com",
+        "extortionAccount": "adfjakdfkaf;af0"
+      },
+      "supportingDocs": [
+        "Aman_Choudhary_Resume_Updated.pdf"
+      ],
+      "status": "Registered",
+      "createdDate": "2026-07-02"
+    },
+    {
+      "id": "CCIS-2026-1001",
+      "victimName": "Rohan Sharma",
+      "contact": "+91 98765 43210",
+      "email": "rohan.sharma@example.com",
+      "incidentType": "OTP Fraud / Phishing",
+      "incidentDate": "2026-06-25T14:30",
+      "location": "New Delhi, DL",
+      "financialLoss": 145000,
+      "status": "FIR Registered",
+      "description": "Received fake APK link mimicking SBI customer update. OTP intercepted and money transferred to unknown Paytm wallet.",
+      "specificDetails": {
+        "transactionId": "UTR984201948102",
+        "beneficiaryAccount": "paytm.wallet@9876543210",
+        "victimBank": "State Bank of India, CP Branch",
+        "phishingLink": "http://sbi-reward-update.apk"
+      },
+      "riskLevel": "High",
+      "createdDate": "2026-06-26"
+    },
+    {
+      "id": "CCIS-2026-1002",
+      "victimName": "Priya Verma",
+      "contact": "+91 91234 56789",
+      "email": "priya.v@example.com",
+      "incidentType": "OLX / QR Code Scam",
+      "incidentDate": "2026-06-27T10:15",
+      "location": "Cyber City, Gurugram",
+      "financialLoss": 42000,
+      "status": "Pre-Assessment",
+      "description": "Scammer sent QR code claiming to send advance deposit for furniture listed on OLX. Scanning QR debited funds.",
+      "specificDetails": {
+        "olxProfileId": "OLX-USER-9482",
+        "scammerVpa": "qr.deposit.merchant@upi",
+        "scammerPhone": "+91 98765 11223",
+        "listedItem": "Wooden Dining Table Set"
+      },
+      "riskLevel": "Medium",
+      "createdDate": "2026-06-27"
+    },
+    {
+      "id": "CCIS-2026-1003",
+      "victimName": "Amitabh Sen",
+      "contact": "+91 99887 76655",
+      "email": "asen.corporate@example.com",
+      "incidentType": "SIM Swapping",
+      "incidentDate": "2026-06-28T02:00",
+      "location": "South Mumbai, MH",
+      "financialLoss": 890000,
+      "status": "Under Investigation",
+      "description": "Mobile connection suddenly went offline midnight. Fraudsters executed SIM swap at retail store and drained corporate account.",
+      "specificDetails": {
+        "compromisedNumber": "+91 99887 76655",
+        "telecomOperator": "Bharti Airtel Ltd",
+        "retailOutletLocation": "Store #12, Bandra West, Mumbai",
+        "swapTime": "28-June-2026 01:45 AM"
+      },
+      "riskLevel": "Critical",
+      "createdDate": "2026-06-28"
+    }
+  ],
+  "firs": [
+    {
+      "firNo": "FIR-2026-9085",
+      "complaintId": "CCIS-2026-1001",
+      "policeStation": "Cyber Crime PS, Special Cell, Central",
+      "investigatingOfficer": "Insp. andye",
+      "itActSections": [
+        "Sec 66C (Identity Theft)",
+        "Sec 66D (Cheating by Personation)",
+        "Sec 43 (Unauthorized Access)",
+        "IPC 420 (Cheating)"
+      ],
+      "registrationDate": "2026-07-03",
+      "status": "Active Investigation"
+    },
+    {
+      "firNo": "FIR-2026-5398",
+      "complaintId": "CCIS-2026-1001",
+      "policeStation": "Cyber Crime PS, Special Cell, Central",
+      "investigatingOfficer": "Insp. Vikram Rathore",
+      "itActSections": [
+        "Sec 66C (Identity Theft)",
+        "Sec 66D (Cheating by Personation)",
+        "Sec 43 (Unauthorized Access)",
+        "IPC 420 (Cheating)"
+      ],
+      "registrationDate": "2026-07-03",
+      "status": "Active Investigation"
+    },
+    {
+      "firNo": "FIR-2026-5368",
+      "complaintId": "CCIS-2026-1001",
+      "policeStation": "jhotwara police station ",
+      "investigatingOfficer": "Insp. aman choudhary",
+      "itActSections": [
+        "Sec 66C (Identity Theft)",
+        "Sec 66D (Cheating by Prsonation)",
+        "Sec 43 (Unauthorized Access)",
+        "IPC 420 (Cheating)"
+      ],
+      "registrationDate": "2026-07-02",
+      "status": "Active Investigation"
+    },
+    {
+      "firNo": "FIR-2026-0421",
+      "complaintId": "CCIS-2026-1001",
+      "policeStation": "Cyber Crime PS, Special Cell, Central",
+      "investigatingOfficer": "Insp. Vikram Rathore",
+      "itActSections": [
+        "Sec 66C (Identity Theft)",
+        "Sec 66D (Cheating by Personation)",
+        "Sec 43 (Data Theft)"
+      ],
+      "registrationDate": "2026-06-26",
+      "status": "Active Investigation"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "EVD-9901",
+      "complaintId": "CCIS-2026-1001",
+      "deviceName": "OnePlus 11 5G (Victim Device)",
+      "deviceType": "Mobile Phone",
+      "serialNo": "IMEI-864201948201",
+      "collectionDate": "2026-06-26 16:00",
+      "collectedBy": "Sub-Insp. Ananya Roy",
+      "hashValue": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "custodyChain": [
+        {
+          "timestamp": "2026-06-26 16:00",
+          "custodian": "Sub-Insp. Ananya Roy",
+          "action": "Seized at Scene",
+          "notes": "Seized in anti-static ESD bag"
+        },
+        {
+          "timestamp": "2026-06-26 18:30",
+          "custodian": "Evidence Locker Sgt. Mohan",
+          "action": "Stored in Vault A-4",
+          "notes": "Physical lock verified"
+        },
+        {
+          "timestamp": "2026-06-27 10:00",
+          "custodian": "Dr. S. K. Gupta (Forensic Lab)",
+          "action": "Transferred for Extraction",
+          "notes": "Cellebrite UFED extraction"
+        }
+      ]
+    }
+  ],
+  "notices": [
+    {
+      "id": "NOT-2026-414",
+      "complaintId": "CCIS-2026-1001",
+      "agencyType": "Telecom Operator",
+      "targetAgency": "Vodafone Idea Nodal",
+      "noticeType": "Sec 91 CrPC Account Freeze & Preservation Notice",
+      "customNotes": "Requesting immediate debit freeze on beneficiary account and detailed IP login logs.",
+      "sentDate": "2026-07-02",
+      "responseStatus": "Pending Response",
+      "documentsReceived": "Awaiting"
+    },
+    {
+      "id": "NOT-2026-088",
+      "complaintId": "CCIS-2026-1001",
+      "targetAgency": "Paytm Payments Bank Ltd",
+      "agencyType": "Payment Gateway",
+      "noticeType": "Sec 91 CrPC Preservation & Freeze",
+      "sentDate": "2026-06-26",
+      "responseStatus": "Received & Account Frozen",
+      "documentsReceived": "Beneficiary Wallet Ledger & IP logs"
+    },
+    {
+      "id": "NOT-2026-089",
+      "complaintId": "CCIS-2026-1001",
+      "targetAgency": "Bharti Airtel Ltd",
+      "agencyType": "Telecom Operator",
+      "noticeType": "CDR & Cell Tower Dump Request",
+      "sentDate": "2026-06-26",
+      "responseStatus": "Pending Response",
+      "documentsReceived": "Awaiting CDR report"
+    }
+  ],
+  "forensics": [
+    {
+      "id": "FOR-2026-012",
+      "complaintId": "CCIS-2026-1001",
+      "evidenceId": "EVD-9901",
+      "assignedExpert": "Dr. S. K. Gupta",
+      "requestType": "Cellebrite UFED Extraction & Malicious APK Analysis",
+      "status": "In Progress",
+      "reportSummary": "Preliminary scan detected malicious SMS Trojan. Extraction of SMS inbox completed.",
+      "completionDate": "2026-06-29 (Expected)"
+    }
+  ],
+  "witnesses": [
+    {
+      "id": "WIT-267",
+      "complaintId": "CCIS-2026-1001",
+      "name": "Inspector Rajesh Kumar",
+      "relation": "Nodal Officer / Branch Manager",
+      "contact": "+91 98111 22334",
+      "statementSummary": "Verified fraudulent IP access log timestamps matching victim ledger statement.  hi he is a crimnal"
+    },
+    {
+      "id": "WIT-101",
+      "complaintId": "CCIS-2026-1001",
+      "name": "Manish Malhotra",
+      "relation": "Bank Nodal Officer",
+      "contact": "+91 98220 11223",
+      "statementSummary": "Confirmed fraudulent transaction origin from IP address 49.207.210.45 at 14:32:10 hrs.",
+      "interviewDate": "2026-06-27"
+    }
+  ]
+}

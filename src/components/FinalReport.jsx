@@ -1,16 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Award, Printer, Download, ShieldCheck, FileText, HardDrive, Microscope, Building2, UserCheck } from 'lucide-react';
 import { investigationService } from '../data/investigationService';
 
 export default function FinalReport({ selectedComplaintId, setSelectedComplaintId }) {
-  const complaints = investigationService.getComplaints();
+  const [complaints, setComplaints] = useState([]);
+  const [firs, setFirs] = useState([]);
+  const [evidence, setEvidence] = useState([]);
+  const [notices, setNotices] = useState([]);
+  const [forensics, setForensics] = useState([]);
+  const [witnesses, setWitnesses] = useState([]);
+
   const activeComplaint = complaints.find(c => c.id === selectedComplaintId) || complaints[0];
 
-  const firs = investigationService.getFirs().filter(f => f.complaintId === activeComplaint?.id);
-  const evidence = investigationService.getEvidence(activeComplaint?.id);
-  const notices = investigationService.getNotices(activeComplaint?.id);
-  const forensics = investigationService.getForensics(activeComplaint?.id);
-  const witnesses = investigationService.getWitnesses(activeComplaint?.id);
+  useEffect(() => {
+    let active = true;
+    async function loadData() {
+      try {
+        const cList = await investigationService.getComplaints();
+        if (active) {
+          setComplaints(cList || []);
+          const activeCId = selectedComplaintId || cList[0]?.id;
+          if (activeCId) {
+            const [fList, eList, nList, foList, wList] = await Promise.all([
+              investigationService.getFirs(),
+              investigationService.getEvidence(activeCId),
+              investigationService.getNotices(activeCId),
+              investigationService.getForensics(activeCId),
+              investigationService.getWitnesses(activeCId)
+            ]);
+            if (active) {
+              setFirs(fList.filter(f => f.complaintId === activeCId));
+              setEvidence(eList || []);
+              setNotices(nList || []);
+              setForensics(foList || []);
+              setWitnesses(wList || []);
+            }
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadData();
+    return () => { active = false; };
+  }, [selectedComplaintId]);
 
   const handlePrint = () => {
     window.print();

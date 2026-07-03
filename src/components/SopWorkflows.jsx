@@ -30,7 +30,7 @@ export default function SopWorkflows() {
           Select a specific cybercrime classification to view step-by-step mandatory investigation protocols from the Cyber Crime Investigation Manual.
         </p>
 
-        <div className="grid-2">
+        <div className="sop-layout-grid">
           {/* Workflow selector sidebar */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-muted)' }}>Crime Categories</div>

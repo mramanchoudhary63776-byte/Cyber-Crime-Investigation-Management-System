@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FileText, ShieldCheck, AlertTriangle, HardDrive, 
   ArrowUpRight, Clock, PlusCircle, CheckCircle2, FileCheck2, Eye 
@@ -6,10 +6,34 @@ import {
 import { investigationService } from '../data/investigationService';
 
 export default function Dashboard({ setActiveTab, setSelectedComplaintId }) {
-  const complaints = investigationService.getComplaints();
-  const firs = investigationService.getFirs();
-  const evidence = investigationService.getEvidence();
-  const notices = investigationService.getNotices();
+  const [complaints, setComplaints] = useState([]);
+  const [firs, setFirs] = useState([]);
+  const [evidence, setEvidence] = useState([]);
+  const [notices, setNotices] = useState([]);
+
+  useEffect(() => {
+    let active = true;
+    async function loadData() {
+      try {
+        const [cData, fData, eData, nData] = await Promise.all([
+          investigationService.getComplaints(),
+          investigationService.getFirs(),
+          investigationService.getEvidence(),
+          investigationService.getNotices()
+        ]);
+        if (active) {
+          setComplaints(cData || []);
+          setFirs(fData || []);
+          setEvidence(eData || []);
+          setNotices(nData || []);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadData();
+    return () => { active = false; };
+  }, []);
 
   const totalFinancialLoss = complaints.reduce((sum, c) => sum + (c.financialLoss || 0), 0);
 

@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HardDrive, Plus, Key, Lock, History, ShieldAlert } from 'lucide-react';
 import { investigationService } from '../data/investigationService';
 
 export default function EvidenceManagement({ selectedComplaintId, setSelectedComplaintId }) {
-  const complaints = investigationService.getComplaints();
+  const [complaints, setComplaints] = useState([]);
+  const [evidenceList, setEvidenceList] = useState([]);
   const activeComplaintId = selectedComplaintId || complaints[0]?.id;
-  const [evidenceList, setEvidenceList] = useState(investigationService.getEvidence(activeComplaintId));
+
+  useEffect(() => {
+    let active = true;
+    async function loadData() {
+      try {
+        const cList = await investigationService.getComplaints();
+        if (active) {
+          setComplaints(cList || []);
+          const activeCId = selectedComplaintId || cList[0]?.id;
+          if (activeCId) {
+            const eList = await investigationService.getEvidence(activeCId);
+            if (active) setEvidenceList(eList || []);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadData();
+    return () => { active = false; };
+  }, [selectedComplaintId]);
   
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedItemForChain, setSelectedItemForChain] = useState(null);
@@ -35,25 +56,36 @@ export default function EvidenceManagement({ selectedComplaintId, setSelectedCom
 
   const handleAddEvidence = async (e) => {
     e.preventDefault();
-    const calculatedHash = await computeSHA256(formData.sampleTextForHash + Date.now());
-    investigationService.addEvidence({
-      complaintId: activeComplaintId,
-      deviceName: formData.deviceName,
-      deviceType: formData.deviceType,
-      serialNo: formData.serialNo,
-      collectedBy: formData.collectedBy,
-      hashValue: calculatedHash
-    });
-    setEvidenceList(investigationService.getEvidence(activeComplaintId));
-    setShowAddModal(false);
+    try {
+      const calculatedHash = await computeSHA256(formData.sampleTextForHash + Date.now());
+      await investigationService.addEvidence({
+        complaintId: activeComplaintId,
+        deviceName: formData.deviceName,
+        deviceType: formData.deviceType,
+        serialNo: formData.serialNo,
+        collectedBy: formData.collectedBy,
+        hashValue: calculatedHash
+      });
+      const eList = await investigationService.getEvidence(activeComplaintId);
+      setEvidenceList(eList || []);
+      setShowAddModal(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleAddCustody = (e) => {
+  const handleAddCustody = async (e) => {
     e.preventDefault();
     if (selectedItemForChain) {
-      investigationService.addCustodyTransfer(selectedItemForChain.id, transferData);
-      setEvidenceList([...investigationService.getEvidence(activeComplaintId)]);
-      setSelectedItemForChain(null);
+      try {
+        await investigationService.addCustodyTransfer(selectedItemForChain.id, transferData);
+        const eList = await investigationService.getEvidence(activeComplaintId);
+        setEvidenceList(eList || []);
+        const updatedItem = eList.find(x => x.id === selectedItemForChain.id);
+        setSelectedItemForChain(updatedItem || null);
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
@@ -69,9 +101,15 @@ export default function EvidenceManagement({ selectedComplaintId, setSelectedCom
             <select 
               className="form-select" 
               value={activeComplaintId} 
-              onChange={e => {
-                setSelectedComplaintId(e.target.value);
-                setEvidenceList(investigationService.getEvidence(e.target.value));
+              onChange={async (e) => {
+                const nextId = e.target.value;
+                setSelectedComplaintId(nextId);
+                try {
+                  const eList = await investigationService.getEvidence(nextId);
+                  setEvidenceList(eList || []);
+                } catch (err) {
+                  console.error(err);
+                }
               }}
               style={{ width: 'auto', padding: '6px 12px', fontSize: '0.85rem' }}
             >

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FileText, Plus, Search, Sparkles, AlertCircle, CheckCircle, Eye, 
   ShieldCheck, Layers, HardDrive, FileCheck, X, ArrowRight, ArrowLeft, 
@@ -7,7 +7,8 @@ import {
 import { investigationService, CATEGORY_REQUIRED_FIELDS, SOP_WORKFLOWS_REF, MAPPED_SECTIONS_BY_CATEGORY } from '../data/investigationService';
 
 export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
-  const [complaints, setComplaints] = useState(investigationService.getComplaints());
+  const [complaints, setComplaints] = useState([]);
+  const [activeViewDetails, setActiveViewDetails] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [wizardStep, setWizardStep] = useState(1);
   const [registeredComplaint, setRegisteredComplaint] = useState(null);
@@ -52,6 +53,38 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
     policeStation: 'Cyber Crime PS, Special Cell, Central',
     investigatingOfficer: 'Insp. Vikram Rathore'
   });
+
+  useEffect(() => {
+    let active = true;
+    async function loadData() {
+      try {
+        const list = await investigationService.getComplaints();
+        if (active) setComplaints(list || []);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadData();
+    return () => { active = false; };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    async function loadDetails() {
+      if (!viewComplaintId) {
+        setActiveViewDetails(null);
+        return;
+      }
+      try {
+        const details = await investigationService.getComplaintDetails(viewComplaintId);
+        if (active) setActiveViewDetails(details);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadDetails();
+    return () => { active = false; };
+  }, [viewComplaintId]);
 
   // Calculate SHA-256 Hash client side
   async function computeSHA256(str) {
@@ -130,46 +163,65 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
     setNewDocName('');
   };
 
-  const handleCreateComplaint = (e) => {
+  const handleCreateComplaint = async (e) => {
     if (e) e.preventDefault();
-    const created = investigationService.addComplaint({
-      ...formData,
-      financialLoss: Number(formData.financialLoss) || 0,
-      supportingDocs: formData.supportingDocs.length > 0 ? formData.supportingDocs : ['victim_statement.pdf', 'evidence_logs.png']
-    });
-    setComplaints([...investigationService.getComplaints()]);
-    setRegisteredComplaint(created);
-    setSelectedComplaintId(created.id);
-    setWizardStep(4); // Move to final FIR generation step
+    try {
+      const created = await investigationService.addComplaint({
+        ...formData,
+        financialLoss: Number(formData.financialLoss) || 0,
+        supportingDocs: formData.supportingDocs.length > 0 ? formData.supportingDocs : ['victim_statement.pdf', 'evidence_logs.png']
+      });
+      const list = await investigationService.getComplaints();
+      setComplaints(list || []);
+      setRegisteredComplaint(created);
+      setSelectedComplaintId(created.id);
+      setWizardStep(4); // Move to final FIR generation step
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleInlineAddEvidence = async (e) => {
     e.preventDefault();
     if (!viewComplaintId) return;
-    const calculatedHash = await computeSHA256(inlineEvData.deviceName + inlineEvData.serialNo + Date.now());
-    investigationService.addEvidence({
-      complaintId: viewComplaintId,
-      deviceName: inlineEvData.deviceName,
-      deviceType: inlineEvData.deviceType,
-      serialNo: inlineEvData.serialNo,
-      collectedBy: inlineEvData.collectedBy,
-      hashValue: calculatedHash
-    });
-    setShowInlineEvidenceForm(false);
-    setComplaints([...investigationService.getComplaints()]);
+    try {
+      const calculatedHash = await computeSHA256(inlineEvData.deviceName + inlineEvData.serialNo + Date.now());
+      await investigationService.addEvidence({
+        complaintId: viewComplaintId,
+        deviceName: inlineEvData.deviceName,
+        deviceType: inlineEvData.deviceType,
+        serialNo: inlineEvData.serialNo,
+        collectedBy: inlineEvData.collectedBy,
+        hashValue: calculatedHash
+      });
+      setShowInlineEvidenceForm(false);
+      const list = await investigationService.getComplaints();
+      setComplaints(list || []);
+      const details = await investigationService.getComplaintDetails(viewComplaintId);
+      setActiveViewDetails(details);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleInlineRegisterFir = (e) => {
+  const handleInlineRegisterFir = async (e) => {
     e.preventDefault();
     if (!viewComplaintId) return;
-    const details = investigationService.getComplaintDetails(viewComplaintId);
-    investigationService.registerFir(viewComplaintId, {
-      policeStation: inlineFirData.policeStation,
-      investigatingOfficer: inlineFirData.investigatingOfficer,
-      itActSections: details.sections
-    });
-    setShowInlineFirForm(false);
-    setComplaints([...investigationService.getComplaints()]);
+    try {
+      const details = await investigationService.getComplaintDetails(viewComplaintId);
+      await investigationService.registerFir(viewComplaintId, {
+        policeStation: inlineFirData.policeStation,
+        investigatingOfficer: inlineFirData.investigatingOfficer,
+        itActSections: details.sections
+      });
+      setShowInlineFirForm(false);
+      const list = await investigationService.getComplaints();
+      setComplaints(list || []);
+      const updatedDetails = await investigationService.getComplaintDetails(viewComplaintId);
+      setActiveViewDetails(updatedDetails);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const openRegisterModal = () => {
@@ -198,7 +250,7 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
     c.incidentType.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const activeViewDetails = viewComplaintId ? investigationService.getComplaintDetails(viewComplaintId) : null;
+
   const currentCategoryFields = CATEGORY_REQUIRED_FIELDS[formData.incidentType] || CATEGORY_REQUIRED_FIELDS['OTP Fraud / Phishing'];
   const previewSections = MAPPED_SECTIONS_BY_CATEGORY[formData.incidentType] || [];
   const previewProcedures = SOP_WORKFLOWS_REF[formData.incidentType] || [];

@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckSquare, AlertTriangle, ShieldCheck, FileSpreadsheet } from 'lucide-react';
 import { investigationService, IT_ACT_SECTIONS_REF } from '../data/investigationService';
 
 export default function PreAssessment({ selectedComplaintId, setSelectedComplaintId, setActiveTab }) {
-  const complaints = investigationService.getComplaints();
+  const [complaints, setComplaints] = useState([]);
   const activeComplaint = complaints.find(c => c.id === selectedComplaintId) || complaints[0];
+
+  useEffect(() => {
+    let active = true;
+    async function loadData() {
+      try {
+        const list = await investigationService.getComplaints();
+        if (active) setComplaints(list || []);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadData();
+    return () => { active = false; };
+  }, []);
 
   const [selectedSections, setSelectedSections] = useState(['Sec 66C', 'Sec 66D']);
   const [isCognizable, setIsCognizable] = useState(true);

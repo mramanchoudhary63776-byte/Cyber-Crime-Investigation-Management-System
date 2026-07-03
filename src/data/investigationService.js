@@ -251,152 +251,105 @@ export const CATEGORY_REQUIRED_FIELDS = {
 
 class InvestigationService {
   constructor() {
-    this.complaints = JSON.parse(localStorage.getItem('ccis_complaints')) || INITIAL_COMPLAINTS;
-    this.firs = JSON.parse(localStorage.getItem('ccis_firs')) || INITIAL_FIRS;
-    this.evidence = JSON.parse(localStorage.getItem('ccis_evidence')) || INITIAL_EVIDENCE;
-    this.notices = JSON.parse(localStorage.getItem('ccis_notices')) || INITIAL_NOTICES;
-    this.forensics = JSON.parse(localStorage.getItem('ccis_forensics')) || INITIAL_FORENSICS;
-    this.witnesses = JSON.parse(localStorage.getItem('ccis_witnesses')) || INITIAL_WITNESSES;
+    this.base = '/api';
   }
 
-  save() {
-    localStorage.setItem('ccis_complaints', JSON.stringify(this.complaints));
-    localStorage.setItem('ccis_firs', JSON.stringify(this.firs));
-    localStorage.setItem('ccis_evidence', JSON.stringify(this.evidence));
-    localStorage.setItem('ccis_notices', JSON.stringify(this.notices));
-    localStorage.setItem('ccis_forensics', JSON.stringify(this.forensics));
-    localStorage.setItem('ccis_witnesses', JSON.stringify(this.witnesses));
+  async getComplaints() {
+    const res = await fetch(`${this.base}/complaints`);
+    return res.json();
   }
 
-  getComplaints() { return this.complaints; }
-  
-  getComplaintDetails(id) {
-    const complaint = this.complaints.find(c => c.id === id) || this.complaints[0];
-    const category = complaint ? complaint.incidentType : 'OTP Fraud / Phishing';
-    const procedures = SOP_WORKFLOWS_REF[category] || SOP_WORKFLOWS_REF['OTP Fraud / Phishing'];
-    const sections = MAPPED_SECTIONS_BY_CATEGORY[category] || MAPPED_SECTIONS_BY_CATEGORY['OTP Fraud / Phishing'];
-    const fir = this.firs.find(f => f.complaintId === complaint?.id);
-    const evidence = this.evidence.filter(e => e.complaintId === complaint?.id);
-    const notices = this.notices.filter(n => n.complaintId === complaint?.id);
-    
-    return {
-      complaint,
-      procedures,
-      sections,
-      fir,
-      evidence,
-      notices
-    };
+  async getComplaintDetails(id) {
+    const res = await fetch(`${this.base}/complaints/${id}`);
+    return res.json();
   }
 
-  addComplaint(data) {
-    const id = `CCIS-2026-${1000 + this.complaints.length + 1}`;
-    const newComplaint = {
-      id,
-      ...data,
-      status: 'Registered',
-      createdDate: new Date().toISOString().split('T')[0]
-    };
-    this.complaints.unshift(newComplaint);
-    this.save();
-    return newComplaint;
+  async addComplaint(data) {
+    const res = await fetch(`${this.base}/complaints`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return res.json();
   }
 
-  getFirs() { return this.firs; }
-  registerFir(complaintId, details) {
-    const firNo = `FIR-2026-${Math.floor(1000 + Math.random() * 9000)}`;
-    const newFir = {
-      firNo,
-      complaintId,
-      ...details,
-      registrationDate: new Date().toISOString().split('T')[0],
-      status: 'Active Investigation'
-    };
-    this.firs.unshift(newFir);
-    
-    const complaint = this.complaints.find(c => c.id === complaintId);
-    if (complaint) {
-      complaint.status = 'FIR Registered';
-    }
-    this.save();
-    return newFir;
+  async getFirs() {
+    const res = await fetch(`${this.base}/firs/all`);
+    return res.json();
   }
 
-  getEvidence(complaintId) {
-    return complaintId ? this.evidence.filter(e => e.complaintId === complaintId) : this.evidence;
-  }
-  addEvidence(data) {
-    const id = `EVD-${Math.floor(1000 + Math.random() * 9000)}`;
-    const newEvidence = {
-      id,
-      ...data,
-      collectionDate: new Date().toLocaleString(),
-      custodyChain: [
-        {
-          timestamp: new Date().toLocaleString(),
-          custodian: data.collectedBy || 'Investigation Officer',
-          action: 'Initial Seizure & Hash Generation',
-          notes: 'Computed SHA-256 integrity hash'
-        }
-      ]
-    };
-    this.evidence.unshift(newEvidence);
-    this.save();
-    return newEvidence;
-  }
-  addCustodyTransfer(evidenceId, transferDetails) {
-    const item = this.evidence.find(e => e.id === evidenceId);
-    if (item) {
-      item.custodyChain.push({
-        timestamp: new Date().toLocaleString(),
-        ...transferDetails
-      });
-      this.save();
-    }
+  async registerFir(complaintId, details) {
+    const res = await fetch(`${this.base}/firs`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ complaintId, ...details })
+    });
+    return res.json();
   }
 
-  getNotices(complaintId) {
-    return complaintId ? this.notices.filter(n => n.complaintId === complaintId) : this.notices;
-  }
-  addNotice(data) {
-    const id = `NOT-2026-${Math.floor(100 + Math.random() * 900)}`;
-    const newNotice = {
-      id,
-      ...data,
-      sentDate: new Date().toISOString().split('T')[0],
-      responseStatus: 'Pending Response',
-      documentsReceived: 'Awaiting'
-    };
-    this.notices.unshift(newNotice);
-    this.save();
-    return newNotice;
+  async getEvidence(complaintId) {
+    const res = await fetch(`${this.base}/evidence/${complaintId}`);
+    return res.json();
   }
 
-  getForensics(complaintId) {
-    return complaintId ? this.forensics.filter(f => f.complaintId === complaintId) : this.forensics;
-  }
-  addForensicRequest(data) {
-    const id = `FOR-2026-${Math.floor(100 + Math.random() * 900)}`;
-    const newForensic = {
-      id,
-      ...data,
-      status: 'Submitted to Lab',
-      reportSummary: 'Pending analysis'
-    };
-    this.forensics.unshift(newForensic);
-    this.save();
-    return newForensic;
+  async addEvidence(data) {
+    const res = await fetch(`${this.base}/evidence`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return res.json();
   }
 
-  getWitnesses(complaintId) {
-    return complaintId ? this.witnesses.filter(w => w.complaintId === complaintId) : this.witnesses;
+  async addCustodyTransfer(evidenceId, transferDetails) {
+    const res = await fetch(`${this.base}/evidence/${evidenceId}/custody`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(transferDetails)
+    });
+    return res.json();
   }
-  addWitness(data) {
-    const id = `WIT-${Math.floor(100 + Math.random() * 900)}`;
-    const newWitness = { id, ...data };
-    this.witnesses.unshift(newWitness);
-    this.save();
-    return newWitness;
+
+  async getNotices(complaintId) {
+    const res = await fetch(`${this.base}/notices/${complaintId}`);
+    return res.json();
+  }
+
+  async addNotice(data) {
+    const res = await fetch(`${this.base}/notices`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  }
+
+  async getForensics(complaintId) {
+    const res = await fetch(`${this.base}/forensics/${complaintId}`);
+    return res.json();
+  }
+
+  async addForensicRequest(data) {
+    const res = await fetch(`${this.base}/forensics`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return res.json();
+  }
+
+  async getWitnesses(complaintId) {
+    const res = await fetch(`${this.base}/witnesses/${complaintId}`);
+    return res.json();
+  }
+
+  async addWitness(data) {
+    const res = await fetch(`${this.base}/witnesses`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    return res.json();
   }
 }
 

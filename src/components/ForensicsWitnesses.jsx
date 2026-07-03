@@ -1,14 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, UserCheck, Camera, FileText, Plus, CheckCircle, Upload, Microscope } from 'lucide-react';
 import { investigationService } from '../data/investigationService';
 
 export default function ForensicsWitnesses({ selectedComplaintId, setSelectedComplaintId }) {
-  const complaints = investigationService.getComplaints();
+  const [complaints, setComplaints] = useState([]);
+  const [forensicsList, setForensicsList] = useState([]);
+  const [witnessList, setWitnessList] = useState([]);
   const activeComplaintId = selectedComplaintId || complaints[0]?.id;
 
   const [activeTab, setActiveSubTab] = useState('forensics'); // forensics, witnesses, scene
-  const [forensicsList, setForensicsList] = useState(investigationService.getForensics(activeComplaintId));
-  const [witnessList, setWitnessList] = useState(investigationService.getWitnesses(activeComplaintId));
+
+  useEffect(() => {
+    let active = true;
+    async function loadData() {
+      try {
+        const cList = await investigationService.getComplaints();
+        if (active) {
+          setComplaints(cList || []);
+          const activeCId = selectedComplaintId || cList[0]?.id;
+          if (activeCId) {
+            const [fList, wList] = await Promise.all([
+              investigationService.getForensics(activeCId),
+              investigationService.getWitnesses(activeCId)
+            ]);
+            if (active) {
+              setForensicsList(fList || []);
+              setWitnessList(wList || []);
+            }
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadData();
+    return () => { active = false; };
+  }, [selectedComplaintId]);
 
   // Crime Scene Checklist State
   const [sceneChecklist, setSceneChecklist] = useState({
@@ -36,29 +63,39 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
     statementSummary: 'Verified fraudulent IP access log timestamps matching victim ledger statement.'
   });
 
-  const handleCreateForensic = (e) => {
+  const handleCreateForensic = async (e) => {
     e.preventDefault();
-    investigationService.addForensicRequest({
-      complaintId: activeComplaintId,
-      evidenceId: forensicForm.evidenceId,
-      assignedExpert: forensicForm.assignedExpert,
-      requestType: forensicForm.requestType
-    });
-    setForensicsList(investigationService.getForensics(activeComplaintId));
-    setShowForensicModal(false);
+    try {
+      await investigationService.addForensicRequest({
+        complaintId: activeComplaintId,
+        evidenceId: forensicForm.evidenceId,
+        assignedExpert: forensicForm.assignedExpert,
+        requestType: forensicForm.requestType
+      });
+      const fList = await investigationService.getForensics(activeComplaintId);
+      setForensicsList(fList || []);
+      setShowForensicModal(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const handleCreateWitness = (e) => {
+  const handleCreateWitness = async (e) => {
     e.preventDefault();
-    investigationService.addWitness({
-      complaintId: activeComplaintId,
-      name: witnessForm.name,
-      relation: witnessForm.relation,
-      contact: witnessForm.contact,
-      statementSummary: witnessForm.statementSummary
-    });
-    setWitnessList(investigationService.getWitnesses(activeComplaintId));
-    setShowWitnessModal(false);
+    try {
+      await investigationService.addWitness({
+        complaintId: activeComplaintId,
+        name: witnessForm.name,
+        relation: witnessForm.relation,
+        contact: witnessForm.contact,
+        statementSummary: witnessForm.statementSummary
+      });
+      const wList = await investigationService.getWitnesses(activeComplaintId);
+      setWitnessList(wList || []);
+      setShowWitnessModal(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -73,10 +110,19 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
             <select 
               className="form-select" 
               value={activeComplaintId} 
-              onChange={e => {
-                setSelectedComplaintId(e.target.value);
-                setForensicsList(investigationService.getForensics(e.target.value));
-                setWitnessList(investigationService.getWitnesses(e.target.value));
+              onChange={async (e) => {
+                const nextId = e.target.value;
+                setSelectedComplaintId(nextId);
+                try {
+                  const [fList, wList] = await Promise.all([
+                    investigationService.getForensics(nextId),
+                    investigationService.getWitnesses(nextId)
+                  ]);
+                  setForensicsList(fList || []);
+                  setWitnessList(wList || []);
+                } catch (err) {
+                  console.error(err);
+                }
               }}
               style={{ width: 'auto', padding: '6px 12px', fontSize: '0.85rem' }}
             >

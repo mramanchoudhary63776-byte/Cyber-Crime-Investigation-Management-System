@@ -1,12 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileCheck, Plus, Building2, Send, CheckCircle2, Clock, ShieldAlert } from 'lucide-react';
 import { investigationService } from '../data/investigationService';
 
 export default function NoticesManagement({ selectedComplaintId, setSelectedComplaintId }) {
-  const complaints = investigationService.getComplaints();
-  const activeComplaintId = selectedComplaintId || complaints[0]?.id;
-  const [notices, setNotices] = useState(investigationService.getNotices(activeComplaintId));
+  const [complaints, setComplaints] = useState([]);
+  const [notices, setNotices] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const activeComplaintId = selectedComplaintId || complaints[0]?.id;
+
+  useEffect(() => {
+    let active = true;
+    async function loadData() {
+      try {
+        const cList = await investigationService.getComplaints();
+        if (active) {
+          setComplaints(cList || []);
+          const activeCId = selectedComplaintId || cList[0]?.id;
+          if (activeCId) {
+            const nList = await investigationService.getNotices(activeCId);
+            if (active) setNotices(nList || []);
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadData();
+    return () => { active = false; };
+  }, [selectedComplaintId]);
 
   const agencyTemplates = {
     'Bank / Wallet Provider': ['Paytm Payments Bank Ltd', 'HDFC Bank Nodal Office', 'State Bank of India Cyber Cell'],
@@ -23,17 +44,22 @@ export default function NoticesManagement({ selectedComplaintId, setSelectedComp
     customNotes: 'Requesting immediate debit freeze on beneficiary account and detailed IP login logs.'
   });
 
-  const handleCreateNotice = (e) => {
+  const handleCreateNotice = async (e) => {
     e.preventDefault();
-    investigationService.addNotice({
-      complaintId: activeComplaintId,
-      agencyType: formData.agencyType,
-      targetAgency: formData.targetAgency,
-      noticeType: formData.noticeType,
-      customNotes: formData.customNotes
-    });
-    setNotices(investigationService.getNotices(activeComplaintId));
-    setShowModal(false);
+    try {
+      await investigationService.addNotice({
+        complaintId: activeComplaintId,
+        agencyType: formData.agencyType,
+        targetAgency: formData.targetAgency,
+        noticeType: formData.noticeType,
+        customNotes: formData.customNotes
+      });
+      const nList = await investigationService.getNotices(activeComplaintId);
+      setNotices(nList || []);
+      setShowModal(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -48,9 +74,15 @@ export default function NoticesManagement({ selectedComplaintId, setSelectedComp
             <select 
               className="form-select" 
               value={activeComplaintId} 
-              onChange={e => {
-                setSelectedComplaintId(e.target.value);
-                setNotices(investigationService.getNotices(e.target.value));
+              onChange={async (e) => {
+                const nextId = e.target.value;
+                setSelectedComplaintId(nextId);
+                try {
+                  const nList = await investigationService.getNotices(nextId);
+                  setNotices(nList || []);
+                } catch (err) {
+                  console.error(err);
+                }
               }}
               style={{ width: 'auto', padding: '6px 12px', fontSize: '0.85rem' }}
             >
@@ -83,44 +115,46 @@ export default function NoticesManagement({ selectedComplaintId, setSelectedComp
           </div>
         </div>
 
-        <table className="csoc-table">
-          <thead>
-            <tr>
-              <th>Notice ID</th>
-              <th>Target Intermediary Agency</th>
-              <th>Notice / Statutory Type</th>
-              <th>Dispatched Date</th>
-              <th>Status</th>
-              <th>Received Record / Deliverable</th>
-            </tr>
-          </thead>
-          <tbody>
-            {notices.map(item => (
-              <tr key={item.id}>
-                <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--info)' }}>
-                  {item.id}
-                </td>
-                <td>
-                  <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Building2 size={16} style={{ color: 'var(--primary)' }} />
-                    {item.targetAgency}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Category: {item.agencyType}</div>
-                </td>
-                <td style={{ fontWeight: 600, fontSize: '0.85rem' }}>{item.noticeType}</td>
-                <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{item.sentDate}</td>
-                <td>
-                  <span className={`status-badge ${item.responseStatus.includes('Received') ? 'approved' : 'pending'}`}>
-                    {item.responseStatus}
-                  </span>
-                </td>
-                <td style={{ fontSize: '0.82rem', color: 'var(--text-dim)' }}>
-                  {item.documentsReceived}
-                </td>
+        <div className="table-responsive">
+          <table className="csoc-table">
+            <thead>
+              <tr>
+                <th>Notice ID</th>
+                <th>Target Intermediary Agency</th>
+                <th>Notice / Statutory Type</th>
+                <th>Dispatched Date</th>
+                <th>Status</th>
+                <th>Received Record / Deliverable</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {notices.map(item => (
+                <tr key={item.id}>
+                  <td style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--info)' }}>
+                    {item.id}
+                  </td>
+                  <td>
+                    <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Building2 size={16} style={{ color: 'var(--primary)' }} />
+                      {item.targetAgency}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Category: {item.agencyType}</div>
+                  </td>
+                  <td style={{ fontWeight: 600, fontSize: '0.85rem' }}>{item.noticeType}</td>
+                  <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{item.sentDate}</td>
+                  <td>
+                    <span className={`status-badge ${item.responseStatus.includes('Received') ? 'approved' : 'pending'}`}>
+                      {item.responseStatus}
+                    </span>
+                  </td>
+                  <td style={{ fontSize: '0.82rem', color: 'var(--text-dim)' }}>
+                    {item.documentsReceived}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {showModal && (
