@@ -438,6 +438,53 @@ app.get('/api/witnesses/:complaintId', (req, res) => {
   }
 });
 
+// 19. GET /api/playbooks - get all playbooks
+app.get('/api/playbooks', (req, res) => {
+  try {
+    const playbooksData = JSON.parse(fs.readFileSync('./src/data/sopPlaybooks.json', 'utf-8'));
+    res.json(playbooksData.sop_playbooks || []);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 20. GET /api/cases/:caseId/playbook-progress - get case playbook progress
+app.get('/api/cases/:caseId/playbook-progress', (req, res) => {
+  try {
+    const db = readDB();
+    const progress = (db.playbookProgress || []).find(p => p.caseId === req.params.caseId) || null;
+    res.json(progress);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 21. POST /api/cases/:caseId/playbook-progress - save case playbook progress
+app.post('/api/cases/:caseId/playbook-progress', (req, res) => {
+  try {
+    const db = readDB();
+    if (!db.playbookProgress) {
+      db.playbookProgress = [];
+    }
+    const { fraudType, checkedSteps } = req.body;
+    const caseId = req.params.caseId;
+    
+    let progress = db.playbookProgress.find(p => p.caseId === caseId);
+    if (progress) {
+      progress.fraudType = fraudType;
+      progress.checkedSteps = checkedSteps;
+    } else {
+      progress = { caseId, fraudType, checkedSteps };
+      db.playbookProgress.unshift(progress);
+    }
+    
+    writeDB(db);
+    res.json(progress);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

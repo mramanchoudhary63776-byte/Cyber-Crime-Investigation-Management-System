@@ -1,0 +1,290 @@
+{
+  "sop_playbooks": [
+    {
+      "fraud_type": "Chemical/Seeds Related Frauds",
+      "branches": [
+        {
+          "channel": "Bank Account",
+          "steps": ["Bank Letter", "Transaction", "KYC Details", "Registered Mobile No.", "IPDR IMEI/IMSI"]
+        },
+        {
+          "channel": "Mobile No.",
+          "steps": ["IPDR", "Check IPDR Service", "IPDR Service Provider Letter", "Use Mo. No.", "IPDR IMEI/IMSI", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "E-mail",
+          "steps": ["Email Letter", "Use Another Mail OR Register Mo. No.", "IPDR", "Check IPDR Service", "IPDR Service Provider Letter", "Use Mo. No.", "IPDR IMEI/IMSI", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "Website",
+          "steps": ["Domain Letter", "branches to: E-mail / IPDR / Registered Mobile", "(follows Email/Mobile sub-flow)"]
+        },
+        {
+          "channel": "Facebook/Instagram",
+          "steps": ["URL Link/Numerical No. OR Screenshot OR Personal Detail about option", "FB/Insta Letter", "IPDR (Check IPDR Service Provider, IPDR Service Provider Letter, Check Destination IP, Use Mo. No., IPDR IMEI/) OR Register Email ID (Email Letter -> IPDR / Use Another Mail -> Register Mo. No.) OR Register Mo. No.", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "Customer Care Fraud",
+      "branches": [
+        {
+          "channel": "Called Mobile No.",
+          "steps": ["CDR+SDR+CAF", "IMEI Run", "New Mobile Number", "CDR+SDR+CAF", "Active No. and Locations"]
+        },
+        {
+          "channel": "Bank Account",
+          "steps": ["Account Holder KYC with Account Opening Form", "Register Mobile No.", "ID Proof", "Transaction Money/Detail (A/c Statement)", "ATM/Bank CCTV Footage", "Transaction IP (use of net banking)", "IPDR", "Mobile No.", "SPR+CDR+CAF", "Location"]
+        },
+        {
+          "channel": "Wallet",
+          "steps": ["Register Mobile No.", "CDR+SDR+CAF", "Trace IMEI Number (if required)", "Location of CDR (Registered M.No.)", "Registered Bank Account", "ID Proof of Bank Account", "Mobile Number Registered in Bank", "IPDR of Wallet", "Trace Mobile No. from IPDR", "CDR+SDR+CAF", "Location"]
+        },
+        {
+          "channel": "E-mail",
+          "steps": ["Email Letter", "Use Another Mail (IPDR, Check IPDR Service, IPDR Service Provider Letter, Use Mo. No., IPDR IMEI/IMSI) OR Register Mo. No.", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "Google (Website)",
+          "steps": ["Ask for the website detail or IP log of the saved page", "From website we can reach to website developer", "Website IPDR", "Website user as admin"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "Email Spoofing",
+      "branches": [
+        {
+          "channel": "Bank Account",
+          "steps": ["Bank Letter", "Transaction", "KYC Details", "Registered Mobile No.", "IPDR IMEI/IMSI"]
+        },
+        {
+          "channel": "E-mail",
+          "steps": ["Email Letter", "Use Another Mail (IPDR, Check IPDR Service, IPDR Service Provider Letter, Use Mo. No., IPDR IMEI/IMSI) OR Register Mo. No.", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "Domain",
+          "steps": ["Domain Letter", "IPDR", "Mobile Number", "Email ID", "Resident Address", "Payment Details"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "Job Fraud",
+      "branches": [
+        {
+          "channel": "Called Mobile No.",
+          "steps": ["CDR+SDR+CAF", "IMEI Run", "New Mobile Number", "CDR+SDR+CAF", "Active No. and Locations"]
+        },
+        {
+          "channel": "Bank Account",
+          "steps": ["Account Holder KYC with Account Opening Form", "Register Mobile No.", "ID Proof", "Transaction Money/Detail (A/c Statement)", "ATM/Bank CCTV Footage", "Transaction IP (use of net banking)", "IPDR", "Mobile No.", "SPR+CDR+CAF", "Location"]
+        },
+        {
+          "channel": "Wallet",
+          "steps": ["Register Mobile No.", "CDR+SDR+CAF", "Trace IMEI Number (if required)", "Location of CDR (Registered M.No.)", "Registered Bank Account", "ID Proof of Bank Account", "Mobile Number Registered in Bank", "IPDR of Wallet", "Trace Mobile No. from IPDR", "CDR+SDR+CAF", "Location"]
+        },
+        {
+          "channel": "Website",
+          "steps": ["Domain Letter", "IPDR", "Mobile Number", "Email ID", "Resident Address", "Payment Details"]
+        },
+        {
+          "channel": "E-mail",
+          "steps": ["Email Letter", "Use Another Mail (IPDR, Check IPDR Service, IPDR Service Provider Letter, Use Mo. No., IPDR IMEI/IMSI) OR Register Mo. No.", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "Loan Fraud",
+      "note": "Identical structure to Job Fraud",
+      "branches": [
+        {
+          "channel": "Called Mobile No.",
+          "steps": ["CDR+SDR+CAF", "IMEI Run", "New Mobile Number", "CDR+SDR+CAF", "Active No. and Locations"]
+        },
+        {
+          "channel": "Bank Account",
+          "steps": ["Account Holder KYC with Account Opening Form", "Register Mobile No.", "ID Proof", "Transaction Money/Detail (A/c Statement)", "ATM/Bank CCTV Footage", "Transaction IP (use of net banking)", "IPDR", "Mobile No.", "SPR+CDR+CAF", "Location"]
+        },
+        {
+          "channel": "Wallet",
+          "steps": ["Register Mobile No.", "CDR+SDR+CAF", "Trace IMEI Number (if required)", "Location of CDR (Registered M.No.)", "Registered Bank Account", "ID Proof of Bank Account", "Mobile Number Registered in Bank", "IPDR of Wallet", "Trace Mobile No. from IPDR", "CDR+SDR+CAF", "Location"]
+        },
+        {
+          "channel": "Website",
+          "steps": ["Domain Letter", "IPDR", "Mobile Number", "Email ID", "Resident Address", "Payment Details"]
+        },
+        {
+          "channel": "E-mail",
+          "steps": ["Email Letter", "Use Another Mail (IPDR, Check IPDR Service, IPDR Service Provider Letter, Use Mo. No., IPDR IMEI/IMSI) OR Register Mo. No.", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "Lottery Fraud",
+      "branches": [
+        {
+          "channel": "Bank Account",
+          "steps": ["Bank Letter", "Transaction", "KYC Details", "Registered Mobile No.", "IPDR IMEI/IMSI"]
+        },
+        {
+          "channel": "Mobile No.",
+          "steps": ["CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "E-mail",
+          "steps": ["Email Letter", "Use Another Mail (IPDR, Check IPDR Service, IPDR Service Provider Letter, Use Mo. No., IPDR IMEI/IMSI) OR Register Mo. No.", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "Website",
+          "steps": ["Domain Letter", "branches to E-mail / IPDR / Registered Mobile"]
+        },
+        {
+          "channel": "Wallet",
+          "steps": ["Register Mobile No.", "CDR+SDR+CAF", "Trace IMEI Number (if required)", "Location of CDR (Registered)", "Registered Bank Account", "ID Proof of Bank Account", "Mobile Number Registered in Bank", "IPDR of Wallet", "Trace Mobile No. from IPDR", "CDR+SDR+CAF", "Location"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "Matrimonial/Gift Fraud",
+      "branches": [
+        {
+          "channel": "Fake Facebook Profile",
+          "steps": ["URL Link/Numeric ID OR Screenshots/Pictures OR Personal Detail about option", "FB/Letter", "IPDR path (Check IPDR Service, IPDR Service Provider Letter, Check Destination IP, Use Mo. No., IPDR IMEI/IMSI) OR Register Email ID path (Email Letter -> IPDR / Use Another Mail -> Register Mo. No.) OR Register Mo. No. directly", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "Matrimonial Website",
+          "steps": ["Bank A/C (Bank Letter, Transaction, KYC Details, IPDR, Registered Mobile No.) OR Online Registered No. OR Registered No. IPDR OR Registered E-mail (Email Letter -> Use Another Mail -> IPDR -> Check IPDR Service -> IPDR Service Provider Letter -> IPDR IMEI/IMSI, OR Register Mo. No.)", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "OLX Fraud",
+      "branches": [
+        {
+          "channel": "Bank Account",
+          "steps": ["Bank Letter", "Transaction", "KYC Details", "Registered Mobile No.", "IPDR IMEI/IMSI"]
+        },
+        {
+          "channel": "Mobile No.",
+          "steps": ["CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "E-mail",
+          "steps": ["Email Letter", "Use Another Mail (IPDR, Check IPDR Service, IPDR Service Provider Letter, Use Mo. No., IPDR IMEI/IMSI) OR Register Mo. No.", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "Wallet",
+          "steps": ["Register Mobile No.", "CDR+SDR+CAF", "Trace IMEI Number (if required)", "Location of CDR (Registered)", "Registered Bank Account", "ID Proof of Bank Account", "Mobile Number Registered in Bank", "IPDR of Wallet", "Trace Mobile No. from IPDR", "CDR+SDR+CAF", "Location"]
+        },
+        {
+          "channel": "Detail from OLX",
+          "steps": ["Registered Email", "Registered Phone Number", "Address if Given", "IPDR Log", "IP Analysis and find phone number from that"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "Online Shopping Fraud",
+      "note": "Identical structure to OLX/Lottery Fraud",
+      "branches": [
+        {
+          "channel": "Bank Account",
+          "steps": ["Bank Letter", "Transaction", "KYC Details", "Registered Mobile No.", "IPDR IMEI/IMSI"]
+        },
+        {
+          "channel": "Mobile No.",
+          "steps": ["CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "E-mail",
+          "steps": ["Email Letter", "Use Another Mail (IPDR, Check IPDR Service, IPDR Service Provider Letter, Use Mo. No., IPDR IMEI/IMSI) OR Register Mo. No.", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "Website",
+          "steps": ["Domain Letter", "branches to E-mail / IPDR / Registered Mobile"]
+        },
+        {
+          "channel": "Wallet",
+          "steps": ["Register Mobile No.", "CDR+SDR+CAF", "Trace IMEI Number (if required)", "Location of CDR (Registered)", "Registered Bank Account", "ID Proof of Bank Account", "Mobile Number Registered in Bank", "IPDR of Wallet", "Trace Mobile No. from IPDR", "CDR+SDR+CAF", "Location"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "OTP Fraud",
+      "branches": [
+        {
+          "channel": "Called Mobile No.",
+          "steps": ["CDR+SDR+CAF", "IMEI Run", "New Mobile Number", "CDR+SDR+CAF", "Active No. and Locations"]
+        },
+        {
+          "channel": "Bank Account",
+          "steps": ["Account Holder KYC with Account Opening Form", "Register Mobile No.", "ID Proof", "Transaction Money/Detail (A/c Statement)", "ATM/Bank CCTV Footage", "Transaction IP (use of net banking)", "IPDR", "Mobile No.", "SPR+CDR+CAF", "Location"]
+        },
+        {
+          "channel": "Wallet",
+          "steps": ["Register Mobile No.", "CDR+SDR+CAF", "Trace IMEI Number (if required)", "Location of CDR (Registered M.No.)", "Registered Bank Account", "ID Proof of Bank Account", "Mobile Number Registered in Bank", "IPDR of Wallet", "Trace Mobile No. from IPDR", "CDR+SDR+CAF", "Location"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "SIM Swapping",
+      "branches": [
+        {
+          "channel": "Mobile Device Information",
+          "steps": ["CDR of Victim Mobile Number", "IMEI Run", "New Mobile Number"]
+        },
+        {
+          "channel": "Bank Detail",
+          "steps": [
+            "Transaction IP (use of net banking) -> IPDR -> Check IPDR Service Provider -> IPDR Service Provider Letter -> IPDR IMEI/IMSI -> Use Mo. No.",
+            "Bank Transaction Detail of Victim -> Account and KYC of Beneficiary -> ATM/Bank CCTV Footage -> Register Mobile No."
+          ]
+        },
+        {
+          "channel": "Final Output",
+          "steps": ["CDR+SDR+CAF", "IMEI/IMSI", "Active No. and Locations"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "Social Media Fraud",
+      "branches": [
+        {
+          "channel": "FB/Insta Letter",
+          "steps": ["IPDR (Check IPDR Service Provider, IPDR Service Provider Letter, Check Destination IP, Use Mo. No., IPDR IMEI/IMSI) OR Register Email ID (Email Letter -> IPDR / Use Another Mail) -> Register Mo. No. OR Register Mo. No. directly", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "WhatsApp",
+          "steps": ["IPDR (Check IPDR Service Provider, IPDR Service Provider Letter, Check Destination IP, Use Mo. No.) OR Use Mobile No. directly", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        },
+        {
+          "channel": "Email ID",
+          "steps": ["Email Letter", "IPDR (Check IPDR Service Provider, IPDR Service Provider Letter, Check Destination IP, Use Mo. No., IPDR IMEI/IMSI) OR Register Mo. No.", "CDR+SDR+CAF", "IMEI/IMSI", "Location"]
+        }
+      ]
+    },
+    {
+      "fraud_type": "Without OTP",
+      "branches": [
+        {
+          "channel": "By Unauthorized Application",
+          "steps": ["Check Complainant Mobile", "Find Suspicious SMS and Mobile No.", "CDR+SDR+CAF", "IMEI Run", "New Mobile", "CDR+SDR+CAF", "Active No. and Accused Locations"]
+        },
+        {
+          "channel": "Card Cloning",
+          "steps": ["ATM/Bank CCTV", "Get the Tower Dump", "Analysis Tower Dump", "Identify the Accused Mobile No.", "CDR+CAF", "Location"]
+        },
+        {
+          "channel": "Bank Transfer",
+          "steps": ["Bank Statement & KYC", "Mobile No., CDR & Email ID Log", "Net Banking IP Log", "All IPDR of IP Log", "Mobile No.", "CDR+CAF", "Location"]
+        },
+        {
+          "channel": "Online Purchase",
+          "steps": ["Identify Platform", "Get the Details from Organization", "IP Log, Mobile No., Email ID", "Mobile Number CDR and IPDR of Email ID", "Trace Mobile No. from IPDR", "CDR+CAF", "Location"]
+        },
+        {
+          "channel": "Wallet",
+          "steps": ["Register Mobile No. & Email ID & Bank Account", "Bank Details, Mobile Number and IP Log", "Bank KYC, Mobile No. CDR+CAF+IPDR from ISP", "New Mobile Number", "CDR+SDR+CAF", "Location"]
+        }
+      ]
+    }
+  ]
+}

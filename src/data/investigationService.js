@@ -351,6 +351,25 @@ class InvestigationService {
     });
     return res.json();
   }
+
+  async getPlaybooks() {
+    const res = await fetch(`${this.base}/playbooks`);
+    return res.json();
+  }
+
+  async getPlaybookProgress(caseId) {
+    const res = await fetch(`${this.base}/cases/${caseId}/playbook-progress`);
+    return res.json();
+  }
+
+  async savePlaybookProgress(caseId, fraudType, checkedSteps) {
+    const res = await fetch(`${this.base}/cases/${caseId}/playbook-progress`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fraudType, checkedSteps })
+    });
+    return res.json();
+  }
 }
 
 export const investigationService = new InvestigationService();

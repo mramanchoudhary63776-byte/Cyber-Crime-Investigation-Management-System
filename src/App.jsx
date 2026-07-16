@@ -80,7 +80,10 @@ function App() {
           )}
 
           {activeTab === 'sop' && (
-            <SopWorkflows />
+            <SopWorkflows 
+              selectedComplaintId={selectedComplaintId}
+              activeRole={activeRole}
+            />
           )}
 
           {activeTab === 'timeline' && (
