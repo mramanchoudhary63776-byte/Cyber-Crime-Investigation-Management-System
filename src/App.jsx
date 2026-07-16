@@ -10,6 +10,7 @@ import ForensicsWitnesses from './components/ForensicsWitnesses';
 import SopWorkflows from './components/SopWorkflows';
 import CaseTimeline from './components/CaseTimeline';
 import FinalReport from './components/FinalReport';
+import CompletedCases from './components/CompletedCases';
 import './App.css';
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
             <Complaints 
               setSelectedComplaintId={setSelectedComplaintId} 
               setActiveTab={setActiveTab} 
+              activeRole={activeRole}
             />
           )}
 
@@ -98,6 +100,15 @@ function App() {
             <FinalReport 
               selectedComplaintId={selectedComplaintId} 
               setSelectedComplaintId={setSelectedComplaintId} 
+            />
+          )}
+
+          {activeTab === 'completed' && (
+            <CompletedCases 
+              selectedComplaintId={selectedComplaintId} 
+              setSelectedComplaintId={setSelectedComplaintId} 
+              setActiveTab={setActiveTab}
+              activeRole={activeRole}
             />
           )}
         </div>

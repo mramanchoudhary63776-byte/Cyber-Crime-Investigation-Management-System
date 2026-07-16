@@ -485,6 +485,67 @@ app.post('/api/cases/:caseId/playbook-progress', (req, res) => {
   }
 });
 
+// 22. GET /api/cases/completed - get all non-active cases
+app.get('/api/cases/completed', (req, res) => {
+  try {
+    const db = readDB();
+    const { reason } = req.query;
+    let completed = db.complaints.filter(c => c.caseStatus && c.caseStatus !== 'active');
+    if (reason) {
+      completed = completed.filter(c => c.closureReason === reason);
+    }
+    res.json(completed);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 23. PATCH /api/cases/:caseId/status - update case status, reasons, audit log
+app.patch('/api/cases/:caseId/status', (req, res) => {
+  try {
+    const db = readDB();
+    const caseId = req.params.caseId;
+    const { status, reason, remarks, performedBy } = req.body;
+
+    const complaint = db.complaints.find(c => c.id === caseId);
+    if (!complaint) {
+      return res.status(404).json({ error: 'Case not found' });
+    }
+
+    complaint.caseStatus = status;
+
+    if (status !== 'active') {
+      complaint.closureReason = reason;
+      complaint.closureRemarks = remarks;
+      complaint.closedBy = performedBy;
+      complaint.closedAt = new Date().toISOString();
+    } else {
+      complaint.closureReason = null;
+      complaint.closureRemarks = null;
+      complaint.closedBy = null;
+      complaint.closedAt = null;
+    }
+
+    if (!complaint.auditLog) {
+      complaint.auditLog = [];
+    }
+
+    complaint.auditLog.push({
+      timestamp: new Date().toISOString(),
+      action: status === 'active' ? 'Case Reopened' : `Case Closed (${reason})`,
+      status: status,
+      reason: reason,
+      remarks: remarks,
+      performedBy: performedBy
+    });
+
+    writeDB(db);
+    res.json(complaint);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

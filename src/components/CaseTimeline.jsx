@@ -101,6 +101,17 @@ export default function CaseTimeline({ selectedComplaintId, setSelectedComplaint
     }
   ];
 
+  if (activeComplaint && activeComplaint.caseStatus && activeComplaint.caseStatus !== 'active') {
+    timelineSteps.push({
+      stage: 'Case Closed & Archived',
+      status: 'Completed',
+      icon: Award,
+      color: activeComplaint.caseStatus === 'resolved' ? 'var(--success)' : activeComplaint.caseStatus === 'false_report' ? 'var(--danger)' : 'var(--warning)',
+      desc: `Case officially archived as [${activeComplaint.closureReason}] by ${activeComplaint.closedBy}. Remarks: "${activeComplaint.closureRemarks}"`,
+      tabTarget: 'completed'
+    });
+  }
+
   return (
     <div>
       <div className="csoc-card">
@@ -171,6 +182,40 @@ export default function CaseTimeline({ selectedComplaintId, setSelectedComplaint
                 );
               })}
             </div>
+
+            {activeComplaint && activeComplaint.auditLog && activeComplaint.auditLog.length > 0 && (
+              <div style={{ marginTop: '36px', borderTop: '1px solid var(--border-color)', paddingTop: '24px' }}>
+                <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--primary)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span>📜 Case Audit Log & Status Transitions</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {activeComplaint.auditLog.map((log, idx) => (
+                    <div key={idx} style={{
+                      padding: '12px 16px',
+                      background: 'rgba(255,255,255,0.02)',
+                      border: '1px solid var(--border-color)',
+                      borderRadius: '8px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                      gap: '8px'
+                    }}>
+                      <div>
+                        <span style={{ fontWeight: 800, color: 'white', fontSize: '0.88rem' }}>{log.action}</span>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                          Remarks: "{log.remarks}"
+                        </div>
+                      </div>
+                      <div style={{ textAlign: 'right', fontSize: '0.78rem' }}>
+                        <div style={{ fontWeight: 700, color: 'var(--primary)' }}>By: {log.performedBy}</div>
+                        <div style={{ color: 'var(--text-muted)', marginTop: '2px' }}>{new Date(log.timestamp).toLocaleString()}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

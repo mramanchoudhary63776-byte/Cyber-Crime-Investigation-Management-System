@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { investigationService, CATEGORY_REQUIRED_FIELDS, SOP_WORKFLOWS_REF, MAPPED_SECTIONS_BY_CATEGORY } from '../data/investigationService';
 
-export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
+export default function Complaints({ setSelectedComplaintId, setActiveTab, activeRole }) {
   const [complaints, setComplaints] = useState([]);
   const [activeViewDetails, setActiveViewDetails] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +19,14 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [aiText, setAiText] = useState('');
   const [aiAnalyzing, setAiAnalyzing] = useState(false);
+
+  // Case Closure State
+  const [showCloseModal, setShowCloseModal] = useState(false);
+  const [closeForm, setCloseForm] = useState({
+    status: 'resolved',
+    reason: 'Resolved',
+    remarks: ''
+  });
 
   // Form State
   const [formData, setFormData] = useState({
@@ -224,6 +232,31 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
     }
   };
 
+  const handleCloseCase = async (e) => {
+    if (e) e.preventDefault();
+    if (!closeForm.remarks.trim()) {
+      alert('Remarks are required for the case closure audit trail.');
+      return;
+    }
+    try {
+      await investigationService.updateCaseStatus(viewComplaintId, {
+        status: closeForm.status,
+        reason: closeForm.reason,
+        remarks: closeForm.remarks,
+        performedBy: activeRole === 'Supervisor' ? 'Supervisor / SHO' : 'Investigating Officer'
+      });
+      const list = await investigationService.getComplaints();
+      setComplaints(list || []);
+      const details = await investigationService.getComplaintDetails(viewComplaintId);
+      setActiveViewDetails(details);
+      setShowCloseModal(false);
+      setCloseForm({ status: 'resolved', reason: 'Resolved', remarks: '' });
+    } catch (err) {
+      console.error('Error closing case:', err);
+      alert('Failed to close the case. Please try again.');
+    }
+  };
+
   const openRegisterModal = () => {
     setFormData({
       victimName: '',
@@ -244,11 +277,13 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
     setShowModal(true);
   };
 
-  const filteredComplaints = complaints.filter(c => 
-    c.victimName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.incidentType.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredComplaints = complaints
+    .filter(c => !c.caseStatus || c.caseStatus === 'active')
+    .filter(c => 
+      c.victimName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.incidentType.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
 
   const currentCategoryFields = CATEGORY_REQUIRED_FIELDS[formData.incidentType] || CATEGORY_REQUIRED_FIELDS['OTP Fraud / Phishing'];
@@ -406,6 +441,32 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
                 <HardDrive size={14} /> Evidences ({activeViewDetails.evidence.length})
               </button>
             </div>
+
+            {activeViewDetails.complaint.caseStatus && activeViewDetails.complaint.caseStatus !== 'active' && (
+              <div style={{
+                background: activeViewDetails.complaint.caseStatus === 'resolved' ? 'rgba(16,185,129,0.1)' : activeViewDetails.complaint.caseStatus === 'false_report' ? 'rgba(239,68,68,0.1)' : 'rgba(245,158,11,0.1)',
+                border: `1px solid ${activeViewDetails.complaint.caseStatus === 'resolved' ? 'var(--success)' : activeViewDetails.complaint.caseStatus === 'false_report' ? 'var(--danger)' : 'var(--warning)'}`,
+                borderRadius: '8px',
+                padding: '16px',
+                marginBottom: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ fontWeight: 800, fontSize: '0.9rem', color: activeViewDetails.complaint.caseStatus === 'resolved' ? '#34d399' : activeViewDetails.complaint.caseStatus === 'false_report' ? '#f87171' : '#fbbf24', textTransform: 'uppercase' }}>
+                    ⚠️ Archived Case File: {activeViewDetails.complaint.caseStatus === 'resolved' ? 'Resolved / Solved' : activeViewDetails.complaint.caseStatus === 'false_report' ? 'False Report' : 'Closed / Other'}
+                  </div>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Date Closed: {activeViewDetails.complaint.closedAt ? new Date(activeViewDetails.complaint.closedAt).toLocaleDateString() : 'N/A'}</span>
+                </div>
+                <div style={{ fontSize: '0.85rem' }}>
+                  <strong>Authorized By:</strong> {activeViewDetails.complaint.closedBy || 'System'}
+                </div>
+                <div style={{ fontSize: '0.85rem' }}>
+                  <strong>Closure Remarks:</strong> "{activeViewDetails.complaint.closureRemarks || 'No remarks provided.'}"
+                </div>
+              </div>
+            )}
 
             {/* TAB 1: OVERVIEW & SPECIFIC REQUIRED DETAILS */}
             {activeDetailTab === 'overview' && (
@@ -633,7 +694,18 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
               </div>
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px', paddingTop: '12px', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px', paddingTop: '12px', borderTop: '1px solid var(--border-color)', flexWrap: 'wrap', gap: '12px' }}>
+              <div>
+                {(!activeViewDetails.complaint.caseStatus || activeViewDetails.complaint.caseStatus === 'active') && (activeRole === 'Officer' || activeRole === 'Supervisor') && (
+                  <button 
+                    className="btn btn-secondary" 
+                    style={{ border: '1px solid var(--danger)', color: '#f87171' }} 
+                    onClick={() => setShowCloseModal(true)}
+                  >
+                    🔒 Close / Archive Case
+                  </button>
+                )}
+              </div>
               <button className="btn btn-primary" onClick={() => {
                 setSelectedComplaintId(viewComplaintId);
                 setViewComplaintId(null);
@@ -642,6 +714,87 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
                 Proceed to Full Investigation Assessment Workflow →
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* CLOSE CASE MODAL */}
+      {showCloseModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1200, padding: '16px'
+        }}>
+          <div className="csoc-card" style={{ width: '500px', background: '#0f172a' }}>
+            <div className="csoc-card-header">
+              <div className="csoc-card-title" style={{ color: 'var(--danger)' }}>
+                🔒 Close & Archive Case File
+              </div>
+              <button onClick={() => setShowCloseModal(false)} style={{ background: 'none', color: 'white', fontSize: '1.2rem', cursor: 'pointer' }}>✕</button>
+            </div>
+
+            <form onSubmit={handleCloseCase}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
+                Archiving case file <strong style={{ color: 'var(--primary)' }}>{viewComplaintId}</strong>. This status change will be permanently recorded in the case audit log.
+              </p>
+
+              <div className="form-group">
+                <label className="form-label">Closure Classification</label>
+                <select 
+                  className="form-select"
+                  value={closeForm.status}
+                  onChange={(e) => {
+                    const statusVal = e.target.value;
+                    let reasonVal = 'Resolved';
+                    if (statusVal === 'false_report') reasonVal = 'False Report';
+                    if (statusVal === 'closed_other') reasonVal = 'Withdrawn';
+                    setCloseForm({
+                      ...closeForm,
+                      status: statusVal,
+                      reason: reasonVal
+                    });
+                  }}
+                >
+                  <option value="resolved">Resolved (Case Solved / Settled)</option>
+                  <option value="false_report">False Report (Fake / Incorrectly Mapped)</option>
+                  <option value="closed_other">Closed Other (Withdrawn / No Trace)</option>
+                </select>
+              </div>
+
+              {closeForm.status === 'closed_other' && (
+                <div className="form-group">
+                  <label className="form-label">Closure Sub-Reason</label>
+                  <select 
+                    className="form-select"
+                    value={closeForm.reason}
+                    onChange={(e) => setCloseForm({ ...closeForm, reason: e.target.value })}
+                  >
+                    <option value="Withdrawn">Withdrawn by Complainant</option>
+                    <option value="Insufficient Evidence">Insufficient Evidence / No Trace Found</option>
+                    <option value="Other">Other / Transferred Jurisdiction</option>
+                  </select>
+                </div>
+              )}
+
+              <div className="form-group">
+                <label className="form-label">Audit Log Remarks *</label>
+                <textarea 
+                  required
+                  rows="3"
+                  className="form-textarea"
+                  value={closeForm.remarks}
+                  onChange={(e) => setCloseForm({ ...closeForm, remarks: e.target.value })}
+                  placeholder="Provide brief summary of action taken or reasoning for archiving case..."
+                />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '20px' }}>
+                <button type="button" className="btn btn-secondary" onClick={() => setShowCloseModal(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary" style={{ background: 'var(--danger)', borderColor: 'var(--danger)', color: 'white' }}>
+                  Confirm & Archive Case
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

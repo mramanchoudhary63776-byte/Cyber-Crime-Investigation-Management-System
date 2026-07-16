@@ -370,6 +370,23 @@ class InvestigationService {
     });
     return res.json();
   }
+
+  async updateCaseStatus(caseId, statusData) {
+    const res = await fetch(`${this.base}/cases/${caseId}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(statusData)
+    });
+    return res.json();
+  }
+
+  async getCompletedCases(reasonFilter) {
+    const url = reasonFilter 
+      ? `${this.base}/cases/completed?reason=${encodeURIComponent(reasonFilter)}`
+      : `${this.base}/cases/completed`;
+    const res = await fetch(url);
+    return res.json();
+  }
 }
 
 export const investigationService = new InvestigationService();
