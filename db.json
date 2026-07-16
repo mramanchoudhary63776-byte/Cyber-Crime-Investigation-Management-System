@@ -1,6 +1,48 @@
 {
   "complaints": [
     {
+      "id": "CCIS-2026-8728",
+      "victimName": "harishta ",
+      "contact": "567898769",
+      "email": "asdfdjhkas@gmail.com",
+      "incidentType": "Customer Care Fraud",
+      "incidentDate": "2026-07-16T04:58",
+      "location": "",
+      "financialLoss": 45678909875,
+      "description": "",
+      "riskLevel": "Medium",
+      "specificDetails": {
+        "helplineSearched": "kjhghjjkh",
+        "remoteAppId": "jhkljh@gmail.com",
+        "searchPlatform": "google"
+      },
+      "supportingDocs": [
+        "victim_statement.pdf",
+        "evidence_logs.png"
+      ],
+      "status": "FIR Registered",
+      "createdDate": "2026-07-16"
+    },
+    {
+      "id": "CCIS-2026-6127",
+      "victimName": "ashish",
+      "contact": "4567890000098",
+      "email": "mrakdsfj@gmail.com",
+      "incidentType": "SIM Swapping",
+      "incidentDate": "2026-07-16T04:56",
+      "location": "",
+      "financialLoss": 45678,
+      "description": "",
+      "riskLevel": "Medium",
+      "specificDetails": {},
+      "supportingDocs": [
+        "victim_statement.pdf",
+        "evidence_logs.png"
+      ],
+      "status": "Registered",
+      "createdDate": "2026-07-16"
+    },
+    {
       "id": "CCIS-2026-5824",
       "victimName": "spider man",
       "contact": "911",
@@ -83,6 +125,19 @@
     }
   ],
   "firs": [
+    {
+      "firNo": "FIR-2026-6136",
+      "complaintId": "CCIS-2026-8728",
+      "policeStation": "Cyber Crime PS, Special Cell, Central",
+      "investigatingOfficer": "Insp. Vikram Rathore",
+      "itActSections": [
+        "Sec 66D (Cheating by Personation)",
+        "Sec 43 (Unauthorized access via Remote App)",
+        "IPC 420"
+      ],
+      "registrationDate": "2026-07-16",
+      "status": "Active Investigation"
+    },
     {
       "firNo": "FIR-2026-9085",
       "complaintId": "CCIS-2026-1001",

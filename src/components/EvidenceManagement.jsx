@@ -213,7 +213,7 @@ export default function EvidenceManagement({ selectedComplaintId, setSelectedCom
                   <div style={{ fontWeight: 700, fontSize: '0.85rem', marginBottom: '10px' }}>Log New Custody Transfer</div>
                   <div className="form-group">
                     <label className="form-label">New Custodian Name / Designation</label>
-                    <input required className="form-input" value={transferData.custodian} onChange={e => setTransferData({...transferData, custodian: e.target.value})} />
+                    <input required className="form-input" value={transferData.custodian} onChange={e => setTransferData({...transferData, custodian: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} placeholder="Name (letters only)" />
                   </div>
                   <div className="form-group">
                     <label className="form-label">Action Reason</label>
@@ -271,7 +271,7 @@ export default function EvidenceManagement({ selectedComplaintId, setSelectedCom
 
               <div className="form-group">
                 <label className="form-label">Seizing Officer</label>
-                <input required className="form-input" value={formData.collectedBy} onChange={e => setFormData({...formData, collectedBy: e.target.value})} />
+                <input required className="form-input" value={formData.collectedBy} onChange={e => setFormData({...formData, collectedBy: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} placeholder="Officer Name (letters only)" />
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '20px' }}>

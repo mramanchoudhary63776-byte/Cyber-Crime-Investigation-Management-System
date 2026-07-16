@@ -82,6 +82,10 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
 
   const handleCreateWitness = async (e) => {
     e.preventDefault();
+    if (witnessForm.contact && witnessForm.contact.length !== 10) {
+      alert('Witness Contact Number must be exactly 10 digits.');
+      return;
+    }
     try {
       await investigationService.addWitness({
         complaintId: activeComplaintId,
@@ -280,7 +284,7 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
               </div>
               <div className="form-group">
                 <label className="form-label">Assigned Forensic Specialist</label>
-                <input className="form-input" value={forensicForm.assignedExpert} onChange={e => setForensicForm({...forensicForm, assignedExpert: e.target.value})} />
+                <input className="form-input" value={forensicForm.assignedExpert} onChange={e => setForensicForm({...forensicForm, assignedExpert: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} placeholder="Expert Name (letters only)" />
               </div>
               <div className="form-group">
                 <label className="form-label">Examination Scope & Requisition Directives</label>
@@ -307,16 +311,16 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
               <div className="grid-2">
                 <div className="form-group">
                   <label className="form-label">Witness Name</label>
-                  <input required className="form-input" value={witnessForm.name} onChange={e => setWitnessForm({...witnessForm, name: e.target.value})} />
+                  <input required className="form-input" value={witnessForm.name} onChange={e => setWitnessForm({...witnessForm, name: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} placeholder="Witness Name (letters only)" />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Relation / Designation</label>
-                  <input required className="form-input" value={witnessForm.relation} onChange={e => setWitnessForm({...witnessForm, relation: e.target.value})} />
+                  <input required className="form-input" value={witnessForm.relation} onChange={e => setWitnessForm({...witnessForm, relation: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} placeholder="Relation (letters only)" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="form-label">Contact Phone</label>
-                <input className="form-input" value={witnessForm.contact} onChange={e => setWitnessForm({...witnessForm, contact: e.target.value})} />
+                <input required className="form-input" maxLength={10} value={witnessForm.contact} onChange={e => setWitnessForm({...witnessForm, contact: e.target.value.replace(/[^0-9]/g, '').slice(0, 10)})} placeholder="10-digit phone number" />
               </div>
               <div className="form-group">
                 <label className="form-label">Official Recorded Deposition Summary</label>

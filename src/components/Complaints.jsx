@@ -545,7 +545,7 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
                         </div>
                         <div className="form-group">
                           <label className="form-label">Investigating Officer (IO)</label>
-                          <input className="form-input" value={inlineFirData.investigatingOfficer} onChange={e => setInlineFirData({...inlineFirData, investigatingOfficer: e.target.value})} />
+                          <input className="form-input" value={inlineFirData.investigatingOfficer} onChange={e => setInlineFirData({...inlineFirData, investigatingOfficer: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} placeholder="Name (letters only)" />
                         </div>
                         <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '14px' }}>
                           <button type="button" className="btn btn-secondary" onClick={() => setShowInlineFirForm(false)}>Cancel</button>
@@ -601,7 +601,7 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
                       </div>
                       <div className="form-group">
                         <label className="form-label">Seizing / Uploading Officer</label>
-                        <input required className="form-input" value={inlineEvData.collectedBy} onChange={e => setInlineEvData({...inlineEvData, collectedBy: e.target.value})} />
+                        <input required className="form-input" value={inlineEvData.collectedBy} onChange={e => setInlineEvData({...inlineEvData, collectedBy: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} placeholder="Name (letters only)" />
                       </div>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>
@@ -726,18 +726,18 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
                 <div className="grid-2">
                   <div className="form-group">
                     <label className="form-label">Victim Full Name *</label>
-                    <input required className="form-input" value={formData.victimName} onChange={e => setFormData({...formData, victimName: e.target.value})} placeholder="e.g. Rahul Verma" />
+                    <input required className="form-input" value={formData.victimName} onChange={e => setFormData({...formData, victimName: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} placeholder="e.g. Rahul Verma (letters only)" />
                   </div>
                   <div className="form-group">
                     <label className="form-label">Contact Number *</label>
-                    <input required className="form-input" value={formData.contact} onChange={e => setFormData({...formData, contact: e.target.value})} placeholder="+91 98765 00000" />
+                    <input required className="form-input" maxLength={10} value={formData.contact} onChange={e => setFormData({...formData, contact: e.target.value.replace(/[^0-9]/g, '').slice(0, 10)})} placeholder="10-digit number" />
                   </div>
                 </div>
 
                 <div className="grid-2">
                   <div className="form-group">
                     <label className="form-label">Email Address</label>
-                    <input type="email" className="form-input" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="victim@domain.com" />
+                    <input type="email" className="form-input" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address (e.g., user@example.com)" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} placeholder="victim@domain.com" />
                   </div>
                   <div className="form-group">
                     <label className="form-label">Cybercrime Category *</label>
@@ -760,7 +760,7 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
                   </div>
                   <div className="form-group">
                     <label className="form-label">Financial Loss (INR)</label>
-                    <input type="number" className="form-input" value={formData.financialLoss} onChange={e => setFormData({...formData, financialLoss: e.target.value})} placeholder="e.g. 50000" />
+                    <input type="text" className="form-input" value={formData.financialLoss} onChange={e => setFormData({...formData, financialLoss: e.target.value.replace(/[^0-9]/g, '')})} placeholder="e.g. 50000 (numbers only)" />
                   </div>
                 </div>
 
@@ -784,6 +784,14 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab }) {
                   <button type="button" className="btn btn-primary" onClick={() => {
                     if (!formData.victimName || !formData.contact) {
                       alert('Please fill in required Victim Name and Contact Number');
+                      return;
+                    }
+                    if (formData.contact.length !== 10) {
+                      alert('Contact Number must be exactly 10 digits.');
+                      return;
+                    }
+                    if (formData.email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+                      alert('Please enter a valid email address.');
                       return;
                     }
                     setWizardStep(2);

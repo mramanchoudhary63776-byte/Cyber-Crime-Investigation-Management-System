@@ -235,7 +235,7 @@ export default function FirManagement({ selectedComplaintId, setSelectedComplain
 
               <div className="form-group">
                 <label className="form-label">Assigned Investigating Officer (IO)</label>
-                <input className="form-input" value={formData.investigatingOfficer} onChange={e => setFormData({...formData, investigatingOfficer: e.target.value})} />
+                <input className="form-input" value={formData.investigatingOfficer} onChange={e => setFormData({...formData, investigatingOfficer: e.target.value.replace(/[^a-zA-Z\s]/g, '')})} placeholder="Officer Name (letters only)" />
               </div>
 
               <div className="form-group">
