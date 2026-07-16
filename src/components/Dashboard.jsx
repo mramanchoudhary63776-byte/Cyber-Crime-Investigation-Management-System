@@ -35,20 +35,39 @@ export default function Dashboard({ setActiveTab, setSelectedComplaintId }) {
     return () => { active = false; };
   }, []);
 
-  const totalFinancialLoss = complaints.reduce((sum, c) => sum + (c.financialLoss || 0), 0);
+  const activeCases = complaints.filter(c => !c.caseStatus || c.caseStatus === 'active');
+  const solvedCases = complaints.filter(c => c.caseStatus && c.caseStatus !== 'active');
+  const totalFinancialLoss = activeCases.reduce((sum, c) => sum + (c.financialLoss || 0), 0);
 
   return (
     <div className="dashboard-view">
       {/* Responsive Metrics Row */}
-      <div className="grid-4 mb-4">
+      <div className="mb-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
         <div className="csoc-card" style={{ borderLeft: '4px solid var(--primary)', margin: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}>Total Complaints</div>
-              <div style={{ fontSize: '1.7rem', fontWeight: 800, marginTop: '4px' }}>{complaints.length}</div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}>Active Complaints</div>
+              <div style={{ fontSize: '1.7rem', fontWeight: 800, marginTop: '4px' }}>{activeCases.length}</div>
             </div>
             <div style={{ padding: '8px', background: 'rgba(6,182,212,0.15)', borderRadius: '8px', color: 'var(--primary)' }}>
               <FileText size={20} />
+            </div>
+          </div>
+        </div>
+
+        <div 
+          className="csoc-card" 
+          style={{ borderLeft: '4px solid #10b981', margin: 0, cursor: 'pointer', transition: 'transform 0.2s' }}
+          onClick={() => setActiveTab('completed')}
+          title="Click to view solved cases archive"
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}>Solved Cases</div>
+              <div style={{ fontSize: '1.7rem', fontWeight: 800, marginTop: '4px', color: '#34d399' }}>{solvedCases.length}</div>
+            </div>
+            <div style={{ padding: '8px', background: 'rgba(16,185,129,0.15)', borderRadius: '8px', color: '#10b981' }}>
+              <CheckCircle2 size={20} />
             </div>
           </div>
         </div>
@@ -68,7 +87,7 @@ export default function Dashboard({ setActiveTab, setSelectedComplaintId }) {
         <div className="csoc-card" style={{ borderLeft: '4px solid var(--accent)', margin: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}>Seized Digital Evidence</div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}>Seized Evidence</div>
               <div style={{ fontSize: '1.7rem', fontWeight: 800, marginTop: '4px' }}>{evidence.length}</div>
             </div>
             <div style={{ padding: '8px', background: 'rgba(139,92,246,0.15)', borderRadius: '8px', color: 'var(--accent)' }}>
@@ -80,7 +99,7 @@ export default function Dashboard({ setActiveTab, setSelectedComplaintId }) {
         <div className="csoc-card" style={{ borderLeft: '4px solid var(--warning)', margin: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}>Reported Loss</div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600 }}>Active Loss</div>
               <div style={{ fontSize: '1.4rem', fontWeight: 800, marginTop: '4px', color: '#fbbf24' }}>
                 ₹{totalFinancialLoss.toLocaleString('en-IN')}
               </div>
@@ -107,7 +126,7 @@ export default function Dashboard({ setActiveTab, setSelectedComplaintId }) {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {complaints.map(item => (
+            {activeCases.map(item => (
               <div 
                 key={item.id}
                 style={{

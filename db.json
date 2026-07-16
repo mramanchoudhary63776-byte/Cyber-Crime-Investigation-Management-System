@@ -122,6 +122,66 @@
       },
       "riskLevel": "Critical",
       "createdDate": "2026-06-28"
+    },
+    {
+      "id": "CCIS-2026-9901",
+      "victimName": "Vikram Aditya",
+      "contact": "9876543210",
+      "email": "vikram.aditya@gmail.com",
+      "incidentType": "OTP Fraud / Phishing",
+      "incidentDate": "2026-07-10T14:30",
+      "location": "Jaipur, RJ",
+      "financialLoss": 120000,
+      "status": "FIR Registered",
+      "description": "Victim fell for a fake KYC bank message. OTP shared and funds debited.",
+      "specificDetails": {},
+      "riskLevel": "High",
+      "createdDate": "2026-07-10",
+      "caseStatus": "resolved",
+      "closureReason": "Resolved",
+      "closureRemarks": "Beneficiary bank account frozen. Scammer tracked and 100% funds recovered back to victim's bank account.",
+      "closedBy": "Supervisor / SHO",
+      "closedAt": "2026-07-15T10:47:19.000Z",
+      "auditLog": [
+        {
+          "timestamp": "2026-07-15T10:47:19.000Z",
+          "action": "Case Closed (Resolved)",
+          "status": "resolved",
+          "reason": "Resolved",
+          "remarks": "Beneficiary bank account frozen. Scammer tracked and 100% funds recovered back to victim's bank account.",
+          "performedBy": "Supervisor / SHO"
+        }
+      ]
+    },
+    {
+      "id": "CCIS-2026-9902",
+      "victimName": "Siddharth Sen",
+      "contact": "9922114455",
+      "email": "siddharth.s@gmail.com",
+      "incidentType": "SIM Swapping",
+      "incidentDate": "2026-07-11T12:00",
+      "location": "Udaipur, RJ",
+      "financialLoss": 75000,
+      "status": "FIR Registered",
+      "description": "SIM swap fraud performed on Airtel network. Corporate account accessed.",
+      "specificDetails": {},
+      "riskLevel": "Critical",
+      "createdDate": "2026-07-11",
+      "caseStatus": "false_report",
+      "closureReason": "False Report",
+      "closureRemarks": "No swap transaction verified. Victim misidentified legitimate transfer as scam. Found to be false report.",
+      "closedBy": "Supervisor / SHO",
+      "closedAt": "2026-07-15T11:00:00.000Z",
+      "auditLog": [
+        {
+          "timestamp": "2026-07-15T11:00:00.000Z",
+          "action": "Case Closed (False Report)",
+          "status": "false_report",
+          "reason": "False Report",
+          "remarks": "No swap transaction verified. Victim misidentified legitimate transfer as scam. Found to be false report.",
+          "performedBy": "Supervisor / SHO"
+        }
+      ]
     }
   ],
   "firs": [
