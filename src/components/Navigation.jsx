@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 
 export default function Navigation({ activeTab, setActiveTab, activeRole, setActiveRole }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const roles = [
     { key: 'Officer', label: 'Investigation Officer', class: 'role-officer' },
@@ -29,82 +29,75 @@ export default function Navigation({ activeTab, setActiveTab, activeRole, setAct
 
   const handleSelectTab = (key) => {
     setActiveTab(key);
-    setMobileOpen(false);
+    setMobileMenuOpen(false);
   };
 
   return (
-    <>
-      {/* Mobile Drawer Overlay */}
-      {mobileOpen && (
-        <div className="sidebar-overlay no-print" onClick={() => setMobileOpen(false)} />
-      )}
-
-      <aside className={`sidebar no-print ${mobileOpen ? 'mobile-open' : ''}`}>
-        <div className="sidebar-header">
+    <header className="navbar-container no-print">
+      {/* Top Banner Row: Brand and Role Switcher */}
+      <div className="navbar-top-row">
+        <div className="navbar-brand">
           <div className="brand-icon">
             <ShieldAlert size={22} />
           </div>
-          <div style={{ flex: 1 }}>
+          <div>
             <div className="brand-title">CCIMS CSOC</div>
             <div className="brand-sub">DIGITIZED SOP v3.0</div>
           </div>
-          <button className="mobile-menu-btn" style={{ display: 'block' }} onClick={() => setMobileOpen(false)}>
-            <X size={20} />
-          </button>
         </div>
 
-        <nav className="nav-menu">
-          <div className="nav-section-label">Investigation Lifecycle</div>
+        {/* Mobile Toggle Button */}
+        <button className="mobile-navbar-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        {/* Role Switcher */}
+        <div className="navbar-role-section">
+          <div className="role-switcher">
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>Role:</span>
+            <select
+              value={activeRole}
+              onChange={(e) => setActiveRole(e.target.value)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'white',
+                fontWeight: 700,
+                fontSize: '0.82rem',
+                cursor: 'pointer'
+              }}
+            >
+              {roles.map(r => (
+                <option key={r.key} value={r.key} style={{ background: '#111827', color: 'white' }}>
+                  {r.label}
+                </option>
+              ))}
+            </select>
+            <span className={`role-badge role-${activeRole.toLowerCase()}`}>
+              {activeRole}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Tabs Row: Centered Navigation */}
+      <nav className={`navbar-tabs-row ${mobileMenuOpen ? 'mobile-show' : ''}`}>
+        <div className="navbar-tabs-list">
           {menuItems.map(item => {
             const Icon = item.icon;
             return (
               <button
                 key={item.key}
-                className={`nav-item ${activeTab === item.key ? 'active' : ''}`}
+                className={`navbar-tab-item ${activeTab === item.key ? 'active' : ''}`}
                 onClick={() => handleSelectTab(item.key)}
               >
-                <Icon size={18} />
+                <Icon size={16} />
                 <span>{item.label}</span>
               </button>
             );
           })}
-        </nav>
-      </aside>
-
-      <header className="top-bar no-print">
-        <div className="page-header-title">
-          <button className="mobile-menu-btn" onClick={() => setMobileOpen(true)} style={{ marginRight: '8px' }}>
-            <Menu size={22} />
-          </button>
-          <ShieldAlert className="text-cyan" size={22} style={{ color: 'var(--primary)' }} />
-          <span style={{ fontSize: '1rem' }}>Cyber Crime Investigation System</span>
         </div>
-
-        <div className="role-switcher">
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>Role:</span>
-          <select
-            value={activeRole}
-            onChange={(e) => setActiveRole(e.target.value)}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: 'white',
-              fontWeight: 700,
-              fontSize: '0.82rem',
-              cursor: 'pointer'
-            }}
-          >
-            {roles.map(r => (
-              <option key={r.key} value={r.key} style={{ background: '#111827', color: 'white' }}>
-                {r.label}
-              </option>
-            ))}
-          </select>
-          <span className={`role-badge role-${activeRole.toLowerCase()}`}>
-            {activeRole}
-          </span>
-        </div>
-      </header>
-    </>
+      </nav>
+    </header>
   );
 }
