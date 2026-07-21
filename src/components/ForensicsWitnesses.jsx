@@ -8,6 +8,9 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
   const [witnessList, setWitnessList] = useState([]);
   const activeComplaintId = selectedComplaintId || complaints[0]?.id;
 
+  const activeComplaint = complaints.find(c => c.id === activeComplaintId);
+  const isClosed = activeComplaint?.caseStatus && activeComplaint?.caseStatus !== 'active';
+
   const [activeTab, setActiveSubTab] = useState('forensics'); // forensics, witnesses, scene
 
   useEffect(() => {
@@ -65,6 +68,7 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
 
   const handleCreateForensic = async (e) => {
     e.preventDefault();
+    if (isClosed) return;
     try {
       await investigationService.addForensicRequest({
         complaintId: activeComplaintId,
@@ -82,6 +86,7 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
 
   const handleCreateWitness = async (e) => {
     e.preventDefault();
+    if (isClosed) return;
     if (witnessForm.contact && witnessForm.contact.length !== 10) {
       alert('Witness Contact Number must be exactly 10 digits.');
       return;
@@ -159,12 +164,27 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
           </button>
         </div>
 
+        {isClosed && (
+          <div style={{
+            background: 'rgba(239,68,68,0.1)',
+            border: '1px solid var(--danger)',
+            borderRadius: '8px',
+            padding: '12px 16px',
+            margin: '0 0 20px 0',
+            color: '#f87171',
+            fontSize: '0.88rem',
+            fontWeight: 700
+          }}>
+            ⚠️ Case File Locked: This case has been archived/closed. Adding forensics requests, witness logs, or editing scene logs is disabled.
+          </div>
+        )}
+
         {/* TAB 1: Forensics */}
         {activeTab === 'forensics' && (
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <div style={{ fontWeight: 700, color: 'var(--text-muted)' }}>Lab Requisitions & Forensic Examinations</div>
-              <button className="btn btn-primary" onClick={() => setShowForensicModal(true)} style={{ fontSize: '0.82rem' }}>
+              <button className="btn btn-primary" onClick={() => setShowForensicModal(true)} disabled={isClosed} style={{ fontSize: '0.82rem' }}>
                 <Plus size={16} /> Requisition Lab Examination
               </button>
             </div>
@@ -194,7 +214,7 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <div style={{ fontWeight: 700, color: 'var(--text-muted)' }}>Recorded Witness Statements & Deposition Notes</div>
-              <button className="btn btn-primary" onClick={() => setShowWitnessModal(true)} style={{ fontSize: '0.82rem' }}>
+              <button className="btn btn-primary" onClick={() => setShowWitnessModal(true)} disabled={isClosed} style={{ fontSize: '0.82rem' }}>
                 <Plus size={16} /> Record Witness Statement
               </button>
             </div>
@@ -222,24 +242,24 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
             <div style={{ fontWeight: 700, color: 'var(--text-muted)', marginBottom: '16px' }}>SOP Crime Scene Visit & Documentation Protocol</div>
             <div className="grid-2">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--border-color)', cursor: 'pointer' }}>
-                  <input type="checkbox" checked={sceneChecklist.visited} onChange={e => setSceneChecklist({...sceneChecklist, visited: e.target.checked})} />
+                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--border-color)', cursor: isClosed ? 'default' : 'pointer', opacity: isClosed ? 0.7 : 1 }}>
+                  <input type="checkbox" checked={sceneChecklist.visited} disabled={isClosed} onChange={e => !isClosed && setSceneChecklist({...sceneChecklist, visited: e.target.checked})} />
                   <div>
-                    <div style={{ fontWeight: 600 }}>Physical / Virtual Scene Visited</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Inspection of server room or victim device acquisition site</div>
+                     <div style={{ fontWeight: 600 }}>Physical / Virtual Scene Visited</div>
+                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Inspection of server room or victim device acquisition site</div>
                   </div>
                 </label>
 
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--border-color)', cursor: 'pointer' }}>
-                  <input type="checkbox" checked={sceneChecklist.photography} onChange={e => setSceneChecklist({...sceneChecklist, photography: e.target.checked})} />
+                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--border-color)', cursor: isClosed ? 'default' : 'pointer', opacity: isClosed ? 0.7 : 1 }}>
+                  <input type="checkbox" checked={sceneChecklist.photography} disabled={isClosed} onChange={e => !isClosed && setSceneChecklist({...sceneChecklist, photography: e.target.checked})} />
                   <div>
                     <div style={{ fontWeight: 600 }}>Forensic Photography Conducted</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Hi-res capture of cabling, screen states, and environment</div>
                   </div>
                 </label>
 
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--border-color)', cursor: 'pointer' }}>
-                  <input type="checkbox" checked={sceneChecklist.videography} onChange={e => setSceneChecklist({...sceneChecklist, videography: e.target.checked})} />
+                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--border-color)', cursor: isClosed ? 'default' : 'pointer', opacity: isClosed ? 0.7 : 1 }}>
+                  <input type="checkbox" checked={sceneChecklist.videography} disabled={isClosed} onChange={e => !isClosed && setSceneChecklist({...sceneChecklist, videography: e.target.checked})} />
                   <div>
                     <div style={{ fontWeight: 600 }}>Continuous Videography Recording</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Video recording of seizure process for court admissibility</div>
@@ -258,10 +278,10 @@ export default function ForensicsWitnesses({ selectedComplaintId, setSelectedCom
                   ))}
                 </div>
 
-                <div style={{ border: '2px dashed var(--border-glow)', padding: '20px', textAlign: 'center', borderRadius: '8px', cursor: 'pointer' }}>
-                  <Upload size={24} style={{ color: 'var(--primary)', marginBottom: '6px' }} />
+                <div style={{ border: isClosed ? '2px dashed var(--border-color)' : '2px dashed var(--border-glow)', padding: '20px', textAlign: 'center', borderRadius: '8px', cursor: isClosed ? 'default' : 'pointer', opacity: isClosed ? 0.5 : 1 }}>
+                  <Upload size={24} style={{ color: isClosed ? 'var(--text-muted)' : 'var(--primary)', marginBottom: '6px' }} />
                   <div style={{ fontSize: '0.8rem', fontWeight: 600 }}>Click to Upload Additional Scene Media</div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Supports JPG, MP4, RAW, LOG</div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{isClosed ? 'Uploads disabled (case closed)' : 'Supports JPG, MP4, RAW, LOG'}</div>
                 </div>
               </div>
             </div>

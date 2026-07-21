@@ -7,6 +7,8 @@ export default function NoticesManagement({ selectedComplaintId, setSelectedComp
   const [notices, setNotices] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const activeComplaintId = selectedComplaintId || complaints[0]?.id;
+  const activeComplaint = complaints.find(c => c.id === activeComplaintId);
+  const isClosed = activeComplaint?.caseStatus && activeComplaint?.caseStatus !== 'active';
 
   useEffect(() => {
     let active = true;
@@ -46,6 +48,7 @@ export default function NoticesManagement({ selectedComplaintId, setSelectedComp
 
   const handleCreateNotice = async (e) => {
     e.preventDefault();
+    if (isClosed) return;
     try {
       await investigationService.addNotice({
         complaintId: activeComplaintId,
@@ -90,11 +93,26 @@ export default function NoticesManagement({ selectedComplaintId, setSelectedComp
                 <option key={c.id} value={c.id}>{c.id} - {c.victimName}</option>
               ))}
             </select>
-            <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+            <button className="btn btn-primary" onClick={() => setShowModal(true)} disabled={isClosed}>
               <Plus size={18} /> Issue Sec 91 Notice
             </button>
           </div>
         </div>
+
+        {isClosed && (
+          <div style={{
+            background: 'rgba(239,68,68,0.1)',
+            border: '1px solid var(--danger)',
+            borderRadius: '8px',
+            padding: '12px 16px',
+            margin: '0 20px 20px 20px',
+            color: '#f87171',
+            fontSize: '0.88rem',
+            fontWeight: 700
+          }}>
+            ⚠️ Case File Locked: This case has been archived/closed. Dispatching new preservation notices is disabled.
+          </div>
+        )}
 
         <div className="grid-3 mb-4">
           <div className="csoc-card" style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.2)' }}>

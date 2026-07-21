@@ -7,6 +7,9 @@ export default function EvidenceManagement({ selectedComplaintId, setSelectedCom
   const [evidenceList, setEvidenceList] = useState([]);
   const activeComplaintId = selectedComplaintId || complaints[0]?.id;
 
+  const activeComplaint = complaints.find(c => c.id === activeComplaintId);
+  const isClosed = activeComplaint?.caseStatus && activeComplaint?.caseStatus !== 'active';
+
   useEffect(() => {
     let active = true;
     async function loadData() {
@@ -56,6 +59,7 @@ export default function EvidenceManagement({ selectedComplaintId, setSelectedCom
 
   const handleAddEvidence = async (e) => {
     e.preventDefault();
+    if (isClosed) return;
     try {
       const calculatedHash = await computeSHA256(formData.sampleTextForHash + Date.now());
       await investigationService.addEvidence({
@@ -76,6 +80,7 @@ export default function EvidenceManagement({ selectedComplaintId, setSelectedCom
 
   const handleAddCustody = async (e) => {
     e.preventDefault();
+    if (isClosed) return;
     if (selectedItemForChain) {
       try {
         await investigationService.addCustodyTransfer(selectedItemForChain.id, transferData);
@@ -117,11 +122,26 @@ export default function EvidenceManagement({ selectedComplaintId, setSelectedCom
                 <option key={c.id} value={c.id}>{c.id} - {c.victimName}</option>
               ))}
             </select>
-            <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
+            <button className="btn btn-primary" onClick={() => setShowAddModal(true)} disabled={isClosed}>
               <Plus size={18} /> Seize New Digital Evidence
             </button>
           </div>
         </div>
+
+        {isClosed && (
+          <div style={{
+            background: 'rgba(239,68,68,0.1)',
+            border: '1px solid var(--danger)',
+            borderRadius: '8px',
+            padding: '12px 16px',
+            margin: '0 20px 20px 20px',
+            color: '#f87171',
+            fontSize: '0.88rem',
+            fontWeight: 700
+          }}>
+            ⚠️ Case File Locked: This case has been archived/closed. Seizing new evidence or recording custody transfers is disabled.
+          </div>
+        )}
 
         <div className="grid-2">
           {/* Evidence Inventory */}
@@ -219,7 +239,7 @@ export default function EvidenceManagement({ selectedComplaintId, setSelectedCom
                     <label className="form-label">Action Reason</label>
                     <input required className="form-input" value={transferData.action} onChange={e => setTransferData({...transferData, action: e.target.value})} />
                   </div>
-                  <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', fontSize: '0.85rem' }}>
+                  <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', fontSize: '0.85rem' }} disabled={isClosed}>
                     Record Transfer Entry
                   </button>
                 </form>

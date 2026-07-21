@@ -9,6 +9,7 @@ export default function FirManagement({ selectedComplaintId, setSelectedComplain
   const [viewFir, setViewFir] = useState(null);
 
   const activeComplaint = complaints.find(c => c.id === selectedComplaintId) || complaints[0];
+  const isClosed = activeComplaint?.caseStatus && activeComplaint?.caseStatus !== 'active';
 
   const [formData, setFormData] = useState({
     complaintId: selectedComplaintId || '',
@@ -58,6 +59,7 @@ export default function FirManagement({ selectedComplaintId, setSelectedComplain
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (isClosed) return;
     try {
       const sectionsArray = formData.itActSections.split(',').map(s => s.trim());
       const createdFir = await investigationService.registerFir(formData.complaintId, {
@@ -83,10 +85,25 @@ export default function FirManagement({ selectedComplaintId, setSelectedComplain
             <FileSpreadsheet style={{ color: 'var(--secondary)' }} />
             Module 5: First Information Report (FIR) Management & SOP Mapping
           </div>
-          <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+          <button className="btn btn-primary" onClick={() => setShowModal(true)} disabled={isClosed}>
             <Plus size={18} /> Register Formal FIR
           </button>
         </div>
+
+        {isClosed && (
+          <div style={{
+            background: 'rgba(239,68,68,0.1)',
+            border: '1px solid var(--danger)',
+            borderRadius: '8px',
+            padding: '12px 16px',
+            margin: '0 20px 20px 20px',
+            color: '#f87171',
+            fontSize: '0.88rem',
+            fontWeight: 700
+          }}>
+            ⚠️ Case File Locked: This case has been archived/closed. Registering new FIRs is disabled.
+          </div>
+        )}
 
         <div className="table-responsive">
           <table className="csoc-table">

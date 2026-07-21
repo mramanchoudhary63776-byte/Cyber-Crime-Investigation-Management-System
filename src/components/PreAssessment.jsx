@@ -24,7 +24,10 @@ export default function PreAssessment({ selectedComplaintId, setSelectedComplain
   const [isCognizable, setIsCognizable] = useState(true);
   const [assessmentNotes, setAssessmentNotes] = useState('Cognizable offence established based on financial fraud and impersonation techniques.');
 
+  const isClosed = activeComplaint?.caseStatus && activeComplaint?.caseStatus !== 'active';
+
   const toggleSection = (sec) => {
+    if (isClosed) return;
     if (selectedSections.includes(sec)) {
       setSelectedSections(selectedSections.filter(s => s !== sec));
     } else {
@@ -33,6 +36,7 @@ export default function PreAssessment({ selectedComplaintId, setSelectedComplain
   };
 
   const handleProceedToFir = () => {
+    if (isClosed) return;
     // Navigate to FIR module with active complaint
     setSelectedComplaintId(activeComplaint.id);
     setActiveTab('fir');
@@ -63,6 +67,21 @@ export default function PreAssessment({ selectedComplaintId, setSelectedComplain
 
         {activeComplaint && (
           <div>
+            {isClosed && (
+              <div style={{
+                background: 'rgba(239,68,68,0.1)',
+                border: '1px solid var(--danger)',
+                borderRadius: '8px',
+                padding: '12px 16px',
+                marginBottom: '20px',
+                color: '#f87171',
+                fontSize: '0.88rem',
+                fontWeight: 700
+              }}>
+                ⚠️ Case File Locked: This case has been archived/closed. Editing legal framing or approving FIRs is disabled.
+              </div>
+            )}
+
             {/* Complaint Overview Banner */}
             <div style={{ background: 'rgba(6,182,212,0.06)', border: '1px solid rgba(6,182,212,0.2)', padding: '16px', borderRadius: 'var(--radius-md)', marginBottom: '24px' }}>
               <div className="grid-3">
@@ -101,14 +120,15 @@ export default function PreAssessment({ selectedComplaintId, setSelectedComplain
                           borderRadius: '8px',
                           border: isChecked ? '1px solid var(--primary)' : '1px solid var(--border-color)',
                           background: isChecked ? 'rgba(6,182,212,0.1)' : 'rgba(255,255,255,0.02)',
-                          cursor: 'pointer',
+                          cursor: isClosed ? 'default' : 'pointer',
+                          opacity: isClosed ? 0.7 : 1,
                           transition: 'all 0.2s ease'
                         }}
                         onClick={() => toggleSection(item.section)}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <span style={{ fontWeight: 800, fontFamily: 'var(--font-mono)', color: 'var(--primary)' }}>{item.section}</span>
-                          <input type="checkbox" checked={isChecked} onChange={() => {}} />
+                          <input type="checkbox" checked={isChecked} disabled={isClosed} onChange={() => {}} />
                         </div>
                         <div style={{ fontWeight: 600, fontSize: '0.85rem', marginTop: '4px' }}>{item.title}</div>
                         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>{item.summary}</div>
@@ -128,13 +148,13 @@ export default function PreAssessment({ selectedComplaintId, setSelectedComplain
                 <div className="form-group">
                   <label className="form-label">Offence Classification</label>
                   <div style={{ display: 'flex', gap: '16px', marginTop: '6px' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                      <input type="radio" name="cognizable" checked={isCognizable} onChange={() => setIsCognizable(true)} />
-                      <span style={{ fontWeight: 600 }}>Cognizable Offence (Register FIR)</span>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: isClosed ? 'default' : 'pointer' }}>
+                      <input type="radio" name="cognizable" checked={isCognizable} disabled={isClosed} onChange={() => setIsCognizable(true)} />
+                      <span style={{ fontWeight: 600, opacity: isClosed ? 0.7 : 1 }}>Cognizable Offence (Register FIR)</span>
                     </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-                      <input type="radio" name="cognizable" checked={!isCognizable} onChange={() => setIsCognizable(false)} />
-                      <span style={{ fontWeight: 600 }}>Non-Cognizable / Civil Adjudication</span>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: isClosed ? 'default' : 'pointer' }}>
+                      <input type="radio" name="cognizable" checked={!isCognizable} disabled={isClosed} onChange={() => setIsCognizable(false)} />
+                      <span style={{ fontWeight: 600, opacity: isClosed ? 0.7 : 1 }}>Non-Cognizable / Civil Adjudication</span>
                     </label>
                   </div>
                 </div>
@@ -145,13 +165,14 @@ export default function PreAssessment({ selectedComplaintId, setSelectedComplain
                     className="form-textarea" 
                     rows="4" 
                     value={assessmentNotes} 
+                    disabled={isClosed}
                     onChange={e => setAssessmentNotes(e.target.value)} 
                   />
                 </div>
 
                 <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-                  <button className="btn btn-secondary">Refer to Adjudicating Officer</button>
-                  <button className="btn btn-primary" onClick={handleProceedToFir}>
+                  <button className="btn btn-secondary" disabled={isClosed}>Refer to Adjudicating Officer</button>
+                  <button className="btn btn-primary" onClick={handleProceedToFir} disabled={isClosed}>
                     <FileSpreadsheet size={18} /> Approve & Register FIR
                   </button>
                 </div>
