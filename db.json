@@ -61,7 +61,22 @@
         "Aman_Choudhary_Resume_Updated.pdf"
       ],
       "status": "Registered",
-      "createdDate": "2026-07-02"
+      "createdDate": "2026-07-02",
+      "caseStatus": "resolved",
+      "closureReason": "Resolved",
+      "closureRemarks": "fake case\n",
+      "closedBy": "Investigating Officer",
+      "closedAt": "2026-07-21T05:27:48.659Z",
+      "auditLog": [
+        {
+          "timestamp": "2026-07-21T05:27:48.659Z",
+          "action": "Case Closed (Resolved)",
+          "status": "resolved",
+          "reason": "Resolved",
+          "remarks": "fake case\n",
+          "performedBy": "Investigating Officer"
+        }
+      ]
     },
     {
       "id": "CCIS-2026-1001",

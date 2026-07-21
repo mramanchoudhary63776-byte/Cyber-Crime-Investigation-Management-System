@@ -1,0 +1,268 @@
+{
+  "source_document": {
+    "title": "Cybercrime Investigation Handbook for Police Officers (5-Days Program)",
+    "issuing_authority": "Ministry of Home Affairs, Government of India",
+    "date_effective": "12 November 2018",
+    "pages": 135,
+    "purpose": "Official training handbook used to train police officers in cybercrime investigation techniques, cyber law, and digital forensics."
+  },
+  "chapters": [
+    {
+      "chapter_no": 1,
+      "title": "Introduction to Cybercrimes",
+      "summary": "Defines cybercrime as unlawful acts where a computer is a tool, a target, or both. Covers the legal background (IT Act 2000 and its 2008 amendment) and catalogs common cybercrime categories.",
+      "crime_types_catalog": [
+        {"name": "Email spoofing", "definition": "Forging an email header so the message appears to come from someone other than the real sender; commonly used in phishing/spam."},
+        {"name": "Phishing/Vishing", "definition": "Fraudulently acquiring sensitive info (banking passwords, card details) by disguising communication as genuine; suspect often traced via originating IP of the email."},
+        {"name": "Email bombing", "definition": "Sending huge volumes of email to one address to overflow the mailbox or crash the mail server (denial of service)."},
+        {"name": "Spamming", "definition": "Unsolicited bulk email sent for advertising or malicious purposes."},
+        {"name": "Spear phishing", "definition": "Targeted phishing aimed at a specific individual or organization using personalized information."},
+        {"name": "Illegal online transaction", "definition": "Unauthorized financial transactions carried out through online banking, wallets or e-commerce."},
+        {"name": "Job frauds", "definition": "Fake recruitment schemes that lure victims into paying money for a promised job that doesn't exist."},
+        {"name": "Cyber defamation", "definition": "Publishing false/damaging statements about a person online."},
+        {"name": "Ponzi scheme", "definition": "Investment fraud paying returns to earlier investors using funds from newer investors."},
+        {"name": "Cyber stalking", "definition": "Persistent online monitoring/harassment of an individual."},
+        {"name": "Cyber bullying", "definition": "Repeated online harassment, usually targeting minors/peers."},
+        {"name": "Cyber pornography", "definition": "Creation/distribution of obscene material through electronic means."},
+        {"name": "Hacking", "definition": "Unauthorized access to a computer system or network."},
+        {"name": "Virus/Worm/Trojan", "definition": "Malicious software categories - self-replicating (virus/worm) or disguised as legitimate software (Trojan) that damage or compromise systems."},
+        {"name": "Website defacement", "definition": "Unauthorized alteration of a website's appearance/content."},
+        {"name": "Salami attack", "definition": "Committing many small, hard-to-detect fraudulent transactions that add up to a large sum."},
+        {"name": "Cross-site scripting (XSS)", "definition": "Injecting malicious scripts into trusted websites to attack visitors."},
+        {"name": "Web jacking", "definition": "Illegally taking control of a website."},
+        {"name": "DOS/DDOS attacks", "definition": "Overwhelming a system/server with traffic to deny service to legitimate users."},
+        {"name": "Ransomware", "definition": "Malware that encrypts a victim's data and demands payment for decryption."},
+        {"name": "Steganography", "definition": "Hiding data/messages inside other files (images, audio) to conceal information."},
+        {"name": "Deep Web & Dark Web", "definition": "Deep web = content not indexed by standard search engines; Dark web = a subset requiring special software (e.g. Tor), often associated with anonymous/illicit activity."},
+        {"name": "Cryptocurrency", "definition": "Digital/virtual currency used, among other things, in ransom demands and money laundering due to pseudo-anonymity."}
+      ]
+    },
+    {
+      "chapter_no": 2,
+      "title": "Computer Networks, E-mails & Web Hosting",
+      "summary": "Covers networking fundamentals (LAN/WAN/VPN/P2P), IP addressing (static/dynamic, IPv4/IPv6), DNS concepts, domain registration process, and how email/mail servers work - foundational technical knowledge for tracing online crimes back to their source.",
+      "key_concepts": [
+        {"term": "Static IP", "definition": "A fixed IP address that does not change over time - easier to trace to a specific connection."},
+        {"term": "Dynamic IP", "definition": "An IP address assigned temporarily by the ISP and reused among users - requires exact timestamp to trace correctly."},
+        {"term": "Registry/Registrar/Registrant", "definition": "Registry maintains the top-level domain database; Registrar sells domain registrations to the public; Registrant is the person/entity who registers the domain."},
+        {"term": "Domain investigation procedure", "definition": "Use WHOIS lookup to identify the registrar, then issue a notice under Section 91 CrPC to the registrar/web-hosting provider to obtain the registrant's real identity, payment, and access details."},
+        {"term": "Email header", "definition": "Contains routing information (originating IP, timestamps, mail servers traversed) critical for tracing the true source of a spoofed or malicious email."}
+      ]
+    },
+    {
+      "chapter_no": 3,
+      "title": "Social Media Investigation",
+      "summary": "Covers crimes reported on social media platforms and how to investigate them, plus an overview of social media monitoring/intelligence tools.",
+      "crime_types": [
+        "Creating impersonating/fake accounts on social media",
+        "Cyberstalking & cyberbullying via social platforms",
+        "Buying illegal items through social media marketplaces"
+      ],
+      "investigation_approach": "Collect the profile URL/numeric ID, screenshots, and any personal details shared; request registration & access IP logs from the platform (often via MLAT for foreign companies like Facebook); trace IP to physical address via the ISP under Section 91 CrPC."
+    },
+    {
+      "chapter_no": 4,
+      "title": "Communication Device Based Investigation",
+      "summary": "Explains cellular network architecture (MSC, HLR, VLR), lawful interception law, and the core data sources used in almost every cybercrime case: CDR, IPDR, and VOIP.",
+      "key_concepts": [
+        {"term": "CDR (Call Detail Record)", "definition": "Record of calls and SMS sent/received by a subscriber - reveals day/night location, handset details, frequently contacted numbers, timestamps, and tower location."},
+        {"term": "SDR (Subscriber Detail Record) / CAF (Customer Application Form)", "definition": "KYC-style subscriber registration information held by the mobile service provider (MSP)."},
+        {"term": "IMEI (International Mobile Equipment Identity)", "definition": "Unique handset identity number (GSM equivalent of ESN in CDMA); dial *#06# on a phone to view it."},
+        {"term": "IMSI (International Mobile Subscriber Identity)", "definition": "Unique number identifying the SIM/subscriber on the network."},
+        {"term": "IPDR (Internet Protocol Detail Record)", "definition": "Record of internet-session-level data (source/destination IP, ports, session duration) from an ISP - used to trace which subscriber used a particular IP address at a particular time."},
+        {"term": "CDR formats", "definition": "Commonly provided as .txt, .html, .xls, .csv, or .pdf - format is inconsistent across service providers."},
+        {"term": "How to seek info from a mobile service provider", "definition": "Send a notice under Section 91/92 CrPC with the phone number or IMEI; the provider responds with the CDR (unavailable if the number underwent Mobile Number Portability without proper linking)."},
+        {"term": "Legal basis for interception", "definition": "Section 5(2) of the Indian Telegraph Act, 1885, read with Rule 419-A of the Indian Telegraph (Amendment) Rules, 2007 - interception orders must be authorized by the Home Secretary (Union/State) or, in emergencies, a Joint Secretary-level officer, with confirmation required within 7 working days and validity capped at 60 days (renewable up to 180 days total)."}
+      ],
+      "cdr_analysis_steps": [
+        "Open the CDR (usually CSV) in MS Excel",
+        "Convert .CSV to .XLS for structured analysis",
+        "Remove merged/irrelevant cells",
+        "Analyze for frequently dialed numbers, tower locations, and time patterns"
+      ]
+    },
+    {
+      "chapter_no": 5,
+      "title": "Mobile Forensics",
+      "summary": "Covers evidence types extractable from mobile devices, memory types, forensic techniques/tools, and procedures for handling a device recovered from a crime scene (including special handling for a device found at a bomb blast site).",
+      "key_concepts": [
+        {"term": "Evidence from mobile devices", "definition": "Call logs, SMS/MMS, contacts, app data, browsing history, GPS/location history, photos/videos, and deleted data recoverable via forensic tools."},
+        {"term": "Write blocker", "definition": "A hardware device that allows data acquisition from storage without altering the original data - critical to preserving evidentiary integrity."},
+        {"term": "Scenario - device from a bomb blast site", "definition": "If the phone is ON, do not touch buttons; isolate from network (Faraday bag) to preserve volatile data. If OFF, do not power it on; forensic imaging must be done by a specialist to avoid triggering anti-tamper/wipe mechanisms."}
+      ]
+    },
+    {
+      "chapter_no": 6,
+      "title": "Investigation of Financial Frauds & Cyber Crimes",
+      "summary": "The core operational chapter - step-by-step investigation procedures for financial fraud types, matching directly with the SOP flowcharts already in the CCIMS project.",
+      "investigation_steps_by_type": [
+        {
+          "fraud_type": "Fraudulent online transaction (general)",
+          "steps": ["Collect bank statement from the bank and identify fraudulent transactions with date/time", "Request the bank for complete transaction details"]
+        },
+        {
+          "fraud_type": "ATM withdrawal fraud",
+          "steps": ["Identify ATM location via the bank", "Request ATM CCTV + nearby external CCTV footage"]
+        },
+        {
+          "fraud_type": "Online transaction fraud",
+          "steps": ["Collect merchant details & account info from the bank", "For e-commerce: contact platform (Flipkart/Amazon/Snapdeal etc.) for delivery address, transaction IP, mobile number", "For wallet transfer: contact wallet provider's nodal officer for KYC, mobile number, transaction & beneficiary details"]
+        },
+        {
+          "fraud_type": "Bank-to-bank transfer fraud",
+          "steps": ["Collect beneficiary account details", "Request account-access IP logs", "Run WHOIS on the IP to find the ISP", "Issue Section 91 CrPC notice to the ISP for the physical address"]
+        },
+        {
+          "fraud_type": "Cheque fraud",
+          "steps": ["Collect cheque copy from bank", "Identify withdrawing branch & obtain CCTV footage", "If transferred via clearing, collect beneficiary account details"]
+        },
+        {
+          "fraud_type": "Common financial fraud steps (summary)",
+          "steps": ["Obtain CDR + SDR of mobile numbers linked to the bank account(s)", "Collect CAF(s) & KYC(s) from the mobile service provider and bank", "Note: the mobile number in bank KYC may differ from the SMS-alert number - collect CDR/SDR/CAF for both if so"]
+        },
+        {
+          "fraud_type": "Advance fee fraud (umbrella category)",
+          "definition": "Fraudsters demand upfront/advance payment for a promised benefit (job, loan, lottery, marriage match) that never materializes. Covers Lottery, Job, Matrimonial, and Loan frauds.",
+          "steps": []
+        },
+        {
+          "fraud_type": "Lottery fraud",
+          "steps": ["Collect SMS content & phone number; analyze CDR; obtain CAF/SDR", "For email: collect sender's email ID and full header", "If money was deposited: collect the beneficiary bank accounts, freeze them, collect KYC & linked phone numbers"]
+        },
+        {
+          "fraud_type": "Job fraud",
+          "steps": ["If a fake/impersonating website was used: collect the URL, run WHOIS, issue Section 91 CrPC notice to the registrar/hosting reseller", "If spoofed emails were sent: collect full header, analyze for originating IP", "If money was deposited to bank accounts: collect account list, freeze, collect KYC and linked phone numbers", "If posted on classifieds (Quikr/OLX/Locanto): identify the Ad ID, obtain posting logs and the IP's physical address"]
+        },
+        {
+          "fraud_type": "Matrimonial fraud",
+          "steps": ["Collect the fake profile URL from the victim", "Obtain registration details: phone number, payment mode, registration IP, and access IPs", "Trace physical address of IP via Section 91 CrPC", "Obtain CDR/SDR/CAF for linked mobile numbers", "If money was transferred: collect bank account list, freeze, collect KYC and phone numbers"]
+        },
+        {
+          "fraud_type": "Loan fraud",
+          "steps": ["If upfront 'processing fee' was demanded: collect bank account list, freeze, collect KYC & phone numbers", "If posted via classifieds: identify Ad ID, obtain logs and IP physical address", "Note: if IP logs show UTC timestamps, convert to IST before requesting physical address from the ISP"]
+        },
+        {
+          "fraud_type": "Email compromise fraud (Business Email Compromise)",
+          "definition": "Attacker compromises or spoofs a corporate email account with fund-transfer authority, monitors for a pending transaction, then impersonates the account holder to redirect payment to a fraudulent account.",
+          "steps": ["Obtain access logs of the compromised account", "Seek beneficiary account details from the complainant", "Follow the money trail through the beneficiary bank"]
+        }
+      ],
+      "key_definitions": [
+        {"term": "Customer ID vs Account Number", "definition": "Customer ID is unique to the person (one per customer even with multiple accounts); Account Number is unique per account."},
+        {"term": "IFSC", "definition": "Indian Financial System Code - identifies a specific bank branch."},
+        {"term": "NEFT", "definition": "National Electronic Fund Transfer - batch-based interbank transfer."},
+        {"term": "RTGS", "definition": "Real-Time Gross Settlement - real-time, high-value interbank transfer."},
+        {"term": "IMPS", "definition": "Immediate Payment Service - instant interbank transfer, 24x7."},
+        {"term": "MICR", "definition": "Magnetic Ink Character Recognition - code used in cheque processing."}
+      ]
+    },
+    {
+      "chapter_no": 7,
+      "title": "Investigation Abroad (Mutual Legal Assistance)",
+      "summary": "Covers the legal process for investigating cybercrimes with an international element - issuing Letters Rogatory (LR) under Section 166-A CrPC, handling incoming LRs, extradition requests, and coordination with foreign police/legal officers. Relevant when evidence, servers, or suspects are located outside India.",
+      "key_provisions": [
+        {"section": "Section 187 CrPC", "definition": "Power to issue summons or warrant in relation to offences with a cross-jurisdictional element."},
+        {"section": "Section 166-A CrPC", "definition": "Allows an Indian court to issue a Letter of Request (Letter Rogatory) to a competent authority in another country to examine a witness/collect evidence located there."},
+        {"section": "Section 105-B CrPC", "definition": "Provides for assistance in securing the transfer of persons for the purpose of identification or testimony."}
+      ]
+    },
+    {
+      "chapter_no": 8,
+      "title": "Scene of Crime Management & Digital Evidence Principles",
+      "summary": "The most operationally detailed chapter - covers the four internationally recognized principles of digital evidence, a 13-step scene-of-crime protocol, and the concept/purpose of cryptographic hashing for evidence integrity. Directly relevant to CCIMS's SHA-256 chain-of-custody feature.",
+      "digital_evidence_principles": [
+        {"principle": 1, "statement": "No action by law enforcement or their agents should change data that may later be relied upon in court."},
+        {"principle": 2, "statement": "If someone must access original data, they must be competent to do so and able to explain the relevance and implications of their actions."},
+        {"principle": 3, "statement": "An audit trail of all processes applied to digital evidence must be created and preserved so an independent third party can reproduce the same result."},
+        {"principle": 4, "statement": "The senior investigating officer has overall responsibility for ensuring the law and these principles are followed."}
+      ],
+      "scene_of_crime_steps_summary": [
+        "1. Before you touch anything - confirm legal authority (consent/warrant), assess safety, and plan the seizure order",
+        "2. Gather equipment - evidence tape, chain-of-custody forms, digital camera, write blockers, wiped storage media, Faraday bags, gloves, imaging hardware",
+        "3. Identify potential evidence sources - RAM, HDD, pen drives, memory cards, optical media, documents/notes",
+        "4. Document the investigation before serving the warrant - describe the crime, the device's role, and seizure scope",
+        "5. Decide what to seize - HDDs, removable media, RAM",
+        "6. Secure the scene - restrict access, preserve area, interview suspects about passwords/data locations",
+        "7. Tag & bag - photograph all components/connections before packing",
+        "8. Handle live systems carefully - do not power down active network gear; acquire volatile evidence if required",
+        "9. Handle security systems - capture ingress/egress logs and recorded footage",
+        "10. Handle peripherals - fax/printer/copier logs and stored documents",
+        "11. Power-down procedure - pull the plug (do not shut down normally) for a desktop; for a laptop, remove the battery separately",
+        "12. Photograph everything - each item's placement, model/serial number, all sides, cabling, and the full room layout",
+        "13. Maintain detailed contemporaneous notes of every action, reason, and timestamp"
+      ],
+      "hashing": {
+        "definition": "A hash value is the output of a hash algorithm run on a file or an entire drive's contents; it acts as a unique 'digital fingerprint' of the data.",
+        "purpose": "Confirms that a forensic copy has not been altered - the integrity check underlying chain-of-custody for digital evidence.",
+        "common_algorithms": ["MD5", "SHA (e.g. SHA-256)"],
+        "indicative_tools": ["FTK Imager", "EnCase Forensic Imager", "Tableau Imager", "HashCalc", "HashTab", "HashTool"]
+      }
+    },
+    {
+      "chapter_no": 9,
+      "title": "Cyber Laws (IT Act 2000/2008, CrPC, Indian Evidence Act)",
+      "summary": "Summarizes the legal framework governing cybercrime investigation and prosecution in India. Extremely useful as reference/RAG content for a CyberLaw chatbot or FIR-drafting tool.",
+      "background": "India's IT Act, 2000 came into force 17 Oct 2000, giving legal recognition to electronic records and digital signatures. It was substantially amended by the IT (Amendment) Act, 2008, effective 27 Oct 2009, adding provisions on information security, data protection, and cyber terrorism.",
+      "it_act_sections": [
+        {"section": "Section 43", "summary": "Penalty/compensation for unauthorized access, data theft/copying, introducing viruses, damaging systems, denial of access, or tampering with a computer/network without permission."},
+        {"section": "Section 66", "summary": "Punishes dishonest/fraudulent acts under Section 43 - up to 3 years imprisonment and/or fine up to Rs. 5 lakh."},
+        {"section": "Section 66B", "summary": "Punishment for dishonestly receiving/retaining a stolen computer resource or communication device - up to 3 years and/or Rs. 1 lakh fine."},
+        {"section": "Section 66C", "summary": "Punishment for identity theft - fraudulent use of another person's electronic signature, password, or unique ID feature."},
+        {"section": "Section 66D", "summary": "Punishment for cheating by personation using a computer resource (the '419/advance-fee scam' provision - covers fake job/loan/lottery/cheque scams)."},
+        {"section": "Section 66E", "summary": "Punishment for violation of privacy - capturing/publishing/transmitting images of a private area without consent."},
+        {"section": "Section 66F", "summary": "Punishment for cyber terrorism - acts intended to threaten India's unity, security, or sovereignty via unauthorized computer access/damage; punishable up to life imprisonment."},
+        {"section": "Section 67", "summary": "Punishment for publishing/transmitting obscene material in electronic form."},
+        {"section": "Section 67A", "summary": "Punishment for publishing/transmitting sexually explicit material electronically - higher penalty than Section 67."},
+        {"section": "Section 67B", "summary": "Punishment for publishing/transmitting/creating child sexual abuse material in electronic form, or facilitating/enticing children into such acts online."},
+        {"section": "Section 67C", "summary": "Requires intermediaries to preserve and retain specified information for a prescribed duration/format; non-compliance is punishable."},
+        {"section": "Section 69", "summary": "Empowers the Central/State Government to direct interception, monitoring, or decryption of information through a computer resource in the interest of sovereignty, security, or public order."},
+        {"section": "Section 69A", "summary": "Empowers the government to direct blocking of public access to information through a computer resource."},
+        {"section": "Section 69B", "summary": "Empowers the government to authorize monitoring/collection of traffic data for cyber security purposes."},
+        {"section": "Section 72", "summary": "Punishment for breach of confidentiality/privacy - disclosing electronic records obtained without the concerned person's consent."},
+        {"section": "Section 72A", "summary": "Punishment for disclosure of personal information in breach of a lawful contract."},
+        {"section": "Section 76", "summary": "Provides for confiscation of computers/storage media used in contravention of the Act."},
+        {"section": "Section 77B", "summary": "Offences punishable with 3+ years imprisonment are cognizable; offences punishable with exactly 3 years are bailable."},
+        {"section": "Section 78", "summary": "Only a police officer of Inspector rank or above may investigate offences under the IT Act."},
+        {"section": "Section 80", "summary": "Empowers police officers (Inspector+) to enter, search, and arrest without warrant a person reasonably suspected of committing an IT Act offence."},
+        {"section": "Section 84B", "summary": "Punishment for abetment of an IT Act offence."},
+        {"section": "Section 84C", "summary": "Punishment for attempt to commit an IT Act offence."}
+      ],
+      "crpc_provisions": [
+        {"section": "Section 165 CrPC", "summary": "Governs search of a place by a police officer during investigation."},
+        {"section": "Section 100 CrPC", "summary": "Requires persons in charge of a closed place to allow a lawful search."},
+        {"section": "Section 91 CrPC", "summary": "Used routinely to issue notices to banks, ISPs, and service providers demanding production of documents/data (the most-cited section in all the fraud SOP flowcharts)."}
+      ],
+      "evidence_act_provisions": [
+        {"section": "Section 65A, Indian Evidence Act", "summary": "Special provision for admissibility of electronic records as evidence."},
+        {"section": "Section 65B, Indian Evidence Act", "summary": "Lays down the conditions for admissibility of electronic records - typically requires a certificate confirming the manner of production/authenticity of the electronic evidence."}
+      ],
+      "cyber_cafe_guidelines_summary": "Cyber cafes must register with a designated agency, verify user identity before allowing access, maintain a log register of users, and manage physical layout/computer resources per prescribed rules - relevant when tracing a suspect's activity back to a public access point."
+    },
+    {
+      "chapter_no": 10,
+      "title": "Case Studies (Real Investigation Walkthroughs)",
+      "summary": "Six real (anonymized) case studies showing end-to-end investigation of specific fraud types, illustrating how the legal provisions and evidence-collection techniques from earlier chapters are applied in practice.",
+      "case_studies": [
+        {
+          "case": "Case Study 1 - Job Fraud",
+          "brief": "Fraudsters cloned an MNC's website and ran a fake recruitment drive from a rented office in the same building, charging candidates a 'confirmation fee' after a fake offer letter.",
+          "laws_applied": ["Section 66C IT Act", "Section 66D IT Act"],
+          "investigation_highlights": "Investigators traced originating IPs from email headers, obtained CDR/CAF from mobile providers, got KYC from the bank (uncovering a sold bank account), traced classified-site (Quikr/OLX) ad postings, and eventually traced access logs to a cyber cafe. Cooperation from the cafe owner + surveillance led to the arrest, followed by laptop forensic imaging (EnCase/IEF/Belkasoft) and IMEI matching that identified three more accused."
+        },
+        {
+          "case": "Case Study 2 - Morphed Obscene Content (Email + Facebook)",
+          "brief": "A suspect sent morphed obscene images of the complainant via email and posted them to a Facebook page, with criminal intimidation.",
+          "laws_applied": ["Section 67 IT Act"],
+          "investigation_highlights": "Notices under Section 79(2)(c)/(3)(b) IT Act were sent to Yahoo and Facebook; foreign providers cited jurisdiction limits (MLAT required). Investigators still traced the originating IP via WHOIS, converted the email timestamp from the sender's timezone to IST, obtained the physical address via Section 91 CrPC, and eventually recovered the image from a roommate's forensically imaged laptop."
+        },
+        {
+          "case": "Case Study 3 - Email Spoofing (Business Email Compromise)",
+          "brief": "A spoofed email impersonating a company CEO instructed the CFO to transfer Rs. 50 lakh to two bank accounts to 'close an import deal.'",
+          "laws_applied": ["Section 66C IT Act", "Section 66D IT Act"],
+          "investigation_highlights": "Investigation proceeded via full email header analysis to trace the spoofing source and beneficiary bank account tracing to recover funds/identify the fraudster."
+        }
+      ]
+    }
+  ],
+  "cross_reference_note": "This handbook's Chapter 6 (fraud-type investigation steps) directly corresponds to the fraud SOP flowcharts already extracted into ccims_sop_playbooks.json - Chapter 9's IT Act sections map onto the legal-basis field that could be added to each playbook step, and Chapter 8's hashing/chain-of-custody principles map directly onto CCIMS's existing SHA-256 evidence module."
+}

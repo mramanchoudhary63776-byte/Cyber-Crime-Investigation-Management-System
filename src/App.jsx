@@ -11,6 +11,7 @@ import SopWorkflows from './components/SopWorkflows';
 import CaseTimeline from './components/CaseTimeline';
 import FinalReport from './components/FinalReport';
 import CompletedCases from './components/CompletedCases';
+import KnowledgeBase from './components/KnowledgeBase';
 import './App.css';
 
 function App() {
@@ -110,6 +111,10 @@ function App() {
               setActiveTab={setActiveTab}
               activeRole={activeRole}
             />
+          )}
+
+          {activeTab === 'handbook' && (
+            <KnowledgeBase />
           )}
         </div>
       </main>

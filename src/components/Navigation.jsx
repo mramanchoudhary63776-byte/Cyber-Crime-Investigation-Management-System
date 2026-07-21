@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   ShieldAlert, LayoutDashboard, FileText, CheckSquare, FileSpreadsheet, 
-  HardDrive, FileCheck, Search, Users, GitBranch, Award, Layers, Menu, X, Archive
+  HardDrive, FileCheck, Search, Users, GitBranch, Award, Layers, Menu, X, Archive, BookOpen
 } from 'lucide-react';
 
 export default function Navigation({ activeTab, setActiveTab, activeRole, setActiveRole }) {
@@ -25,7 +25,8 @@ export default function Navigation({ activeTab, setActiveTab, activeRole, setAct
     { key: 'sop', label: 'SOP Workflows', icon: Layers },
     { key: 'timeline', label: 'Case Timeline', icon: GitBranch },
     { key: 'report', label: 'Final Investigation Report', icon: Award },
-    { key: 'completed', label: 'Completed Cases', icon: Archive }
+    { key: 'completed', label: 'Completed Cases', icon: Archive },
+    { key: 'handbook', label: 'Reference Handbook', icon: BookOpen }
   ];
 
   const handleSelectTab = (key) => {
