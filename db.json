@@ -1,6 +1,30 @@
 {
   "complaints": [
     {
+      "id": "CCIS-2026-9679",
+      "victimName": "abhishek",
+      "contact": "1234567654",
+      "email": "lajsdfhakj@gmail.com",
+      "incidentType": "SIM Swapping",
+      "incidentDate": "2026-07-21T07:18",
+      "location": "",
+      "financialLoss": 1000,
+      "description": "lost 1k rs by sim swapping",
+      "riskLevel": "Medium",
+      "specificDetails": {
+        "compromisedNumber": "567898765678",
+        "retailOutletLocation": "tonk road",
+        "swapTime": "21 june 2026",
+        "telecomOperator": "jio"
+      },
+      "supportingDocs": [
+        "victim_statement.pdf",
+        "evidence_logs.png"
+      ],
+      "status": "FIR Registered",
+      "createdDate": "2026-07-21"
+    },
+    {
       "id": "CCIS-2026-8728",
       "victimName": "harishta ",
       "contact": "567898769",
@@ -47,7 +71,7 @@
       "victimName": "spider man",
       "contact": "911",
       "email": "sidy@gmail.com",
-      "incidentType": "Matrimonial / Romance Scam",
+      "incidentType": "Matrimonial/Gift Fraud",
       "incidentDate": "2026-07-02T05:12",
       "location": "",
       "financialLoss": 20000,
@@ -83,7 +107,7 @@
       "victimName": "Rohan Sharma",
       "contact": "+91 98765 43210",
       "email": "rohan.sharma@example.com",
-      "incidentType": "OTP Fraud / Phishing",
+      "incidentType": "OTP Fraud",
       "incidentDate": "2026-06-25T14:30",
       "location": "New Delhi, DL",
       "financialLoss": 145000,
@@ -103,7 +127,7 @@
       "victimName": "Priya Verma",
       "contact": "+91 91234 56789",
       "email": "priya.v@example.com",
-      "incidentType": "OLX / QR Code Scam",
+      "incidentType": "OLX Fraud",
       "incidentDate": "2026-06-27T10:15",
       "location": "Cyber City, Gurugram",
       "financialLoss": 42000,
@@ -143,7 +167,7 @@
       "victimName": "Vikram Aditya",
       "contact": "9876543210",
       "email": "vikram.aditya@gmail.com",
-      "incidentType": "OTP Fraud / Phishing",
+      "incidentType": "OTP Fraud",
       "incidentDate": "2026-07-10T14:30",
       "location": "Jaipur, RJ",
       "financialLoss": 120000,
@@ -200,6 +224,34 @@
     }
   ],
   "firs": [
+    {
+      "firNo": "FIR-2026-1785",
+      "complaintId": "CCIS-2026-9679",
+      "policeStation": "Cyber Crime PS, Special Cell, Central",
+      "investigatingOfficer": "Insp. Vikram Rathore",
+      "itActSections": [
+        "Sec 66C (Identity Theft)",
+        "Sec 66D (Cheating by Personation)",
+        "Sec 43 (Computer Damage)",
+        "IPC 419/420"
+      ],
+      "registrationDate": "2026-07-21",
+      "status": "Active Investigation"
+    },
+    {
+      "firNo": "FIR-2026-3338",
+      "complaintId": "CCIS-2026-1001",
+      "policeStation": "Cyber Crime PS, Special Cell, Central",
+      "investigatingOfficer": "Insp. Vikram Rathore",
+      "itActSections": [
+        "Sec 66C (Identity Theft)",
+        "Sec 66D (Cheating by Personation)",
+        "Sec 43 (Unauthorized Access)",
+        "IPC 420 (Cheating)"
+      ],
+      "registrationDate": "2026-07-21",
+      "status": "Active Investigation"
+    },
     {
       "firNo": "FIR-2026-6136",
       "complaintId": "CCIS-2026-8728",
@@ -270,6 +322,24 @@
     }
   ],
   "evidence": [
+    {
+      "id": "EVD-6081",
+      "complaintId": "CCIS-2026-8728",
+      "deviceName": "Samsung Galaxy S22 Ultra",
+      "deviceType": "Mobile Phone",
+      "serialNo": "IMEI-998877665544",
+      "collectedBy": "Insp. Vikram Rathore",
+      "collectionDate": "21/7/2026, 12:46:42 pm",
+      "hashValue": "44911563a6b0b1b9327d6a0b734493868c768900b8c764b47a4335acb65928bf",
+      "custodyChain": [
+        {
+          "timestamp": "21/7/2026, 12:46:42 pm",
+          "custodian": "Insp. Vikram Rathore",
+          "action": "Initial Seizure & Hash Generation",
+          "notes": "SHA-256 integrity hash computed"
+        }
+      ]
+    },
     {
       "id": "EVD-9901",
       "complaintId": "CCIS-2026-1001",

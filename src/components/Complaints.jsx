@@ -33,7 +33,7 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab, activ
     victimName: '',
     contact: '',
     email: '',
-    incidentType: 'OTP Fraud / Phishing',
+    incidentType: 'OTP Fraud',
     incidentDate: new Date().toISOString().slice(0, 16),
     location: '',
     financialLoss: '',
@@ -110,21 +110,29 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab, activ
 
     setTimeout(() => {
       const lower = aiText.toLowerCase();
-      let detectedType = 'OTP Fraud / Phishing';
+      let detectedType = 'OTP Fraud';
       let detectedLoss = 0;
 
       if (lower.includes('olx') || lower.includes('qr') || lower.includes('scan') || lower.includes('sofa') || lower.includes('advance')) {
-        detectedType = 'OLX / QR Code Scam';
+        detectedType = 'OLX Fraud';
       } else if (lower.includes('sim') || lower.includes('swap') || lower.includes('network') || lower.includes('tower')) {
         detectedType = 'SIM Swapping';
       } else if (lower.includes('customer care') || lower.includes('anydesk') || lower.includes('quicksupport') || lower.includes('google search')) {
         detectedType = 'Customer Care Fraud';
       } else if (lower.includes('email') || lower.includes('bec') || lower.includes('domain') || lower.includes('spoof')) {
-        detectedType = 'Email Spoofing / BEC Fraud';
+        detectedType = 'Email Spoofing';
       } else if (lower.includes('loan') || lower.includes('app') || lower.includes('threat')) {
-        detectedType = 'Loan App Scam';
-      } else if (lower.includes('shaadi') || lower.includes('matrimonial') || lower.includes('romance') || lower.includes('extortion')) {
-        detectedType = 'Matrimonial / Romance Scam';
+        detectedType = 'Loan Fraud';
+      } else if (lower.includes('shaadi') || lower.includes('matrimonial') || lower.includes('romance') || lower.includes('extortion') || lower.includes('gift')) {
+        detectedType = 'Matrimonial/Gift Fraud';
+      } else if (lower.includes('seeds') || lower.includes('chemical') || lower.includes('fertilizer') || lower.includes('crop')) {
+        detectedType = 'Chemical/Seeds Related Frauds';
+      } else if (lower.includes('job') || lower.includes('naukri') || lower.includes('recruit') || lower.includes('hiring')) {
+        detectedType = 'Job Fraud';
+      } else if (lower.includes('lottery') || lower.includes('lotto') || lower.includes('prize') || lower.includes('won')) {
+        detectedType = 'Lottery Fraud';
+      } else if (lower.includes('shop') || lower.includes('shopping') || lower.includes('order') || lower.includes('amazon') || lower.includes('flipkart') || lower.includes('ecommerce')) {
+        detectedType = 'Online Shopping Fraud';
       }
 
       const matches = aiText.match(/(?:rs\.?|inr|₹|rs|rupees|rupaye)?\s*([\d,]+)\s*(?:rs|rupees|rupaye|k|thousand|lakh)?/gi);
@@ -262,7 +270,7 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab, activ
       victimName: '',
       contact: '',
       email: '',
-      incidentType: 'OTP Fraud / Phishing',
+      incidentType: 'OTP Fraud',
       incidentDate: new Date().toISOString().slice(0, 16),
       location: '',
       financialLoss: '',
@@ -286,7 +294,7 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab, activ
     );
 
 
-  const currentCategoryFields = CATEGORY_REQUIRED_FIELDS[formData.incidentType] || CATEGORY_REQUIRED_FIELDS['OTP Fraud / Phishing'];
+  const currentCategoryFields = CATEGORY_REQUIRED_FIELDS[formData.incidentType] || CATEGORY_REQUIRED_FIELDS['OTP Fraud'];
   const previewSections = MAPPED_SECTIONS_BY_CATEGORY[formData.incidentType] || [];
   const previewProcedures = SOP_WORKFLOWS_REF[formData.incidentType] || [];
 
@@ -895,13 +903,17 @@ export default function Complaints({ setSelectedComplaintId, setActiveTab, activ
                   <div className="form-group">
                     <label className="form-label">Cybercrime Category *</label>
                     <select className="form-select" value={formData.incidentType} onChange={e => setFormData({...formData, incidentType: e.target.value})}>
-                      <option>OTP Fraud / Phishing</option>
-                      <option>OLX / QR Code Scam</option>
-                      <option>SIM Swapping</option>
-                      <option>Email Spoofing / BEC Fraud</option>
+                      <option>Chemical/Seeds Related Frauds</option>
                       <option>Customer Care Fraud</option>
-                      <option>Loan App Scam</option>
-                      <option>Matrimonial / Romance Scam</option>
+                      <option>Email Spoofing</option>
+                      <option>Job Fraud</option>
+                      <option>Loan Fraud</option>
+                      <option>Lottery Fraud</option>
+                      <option>Matrimonial/Gift Fraud</option>
+                      <option>OLX Fraud</option>
+                      <option>Online Shopping Fraud</option>
+                      <option>OTP Fraud</option>
+                      <option>SIM Swapping</option>
                     </select>
                   </div>
                 </div>
